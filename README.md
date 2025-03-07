@@ -1,7 +1,10 @@
 # Baadal Lens
-Simplifying the process of viewing large scale data with our metastore viewer for S3/Azure!
 
-# Folder Structure
+**Simplifying the process of viewing large-scale data with our metastore viewer for S3/Azure!**
+
+## Folder Structure
+
+```
 baadal_lens/
 ├── frontend/                 # React + Vite Frontend
 │   ├── public/
@@ -14,7 +17,7 @@ baadal_lens/
 │   │   │   └── forms/        # Input forms
 │   │   ├── hooks/            # Custom React hooks
 │   │   ├── pages/            # Page components
-│   │   │   ├── HomePage.tsx      # Landing/intro page
+│   │   │   ├── HomePage.tsx  # Landing/intro page
 │   │   ├── services/         # API client services
 │   │   │   ├── api.js        # Base API configuration
 │   │   │   ├── metadataService.js # Metadata-related API calls
@@ -76,5 +79,4 @@ baadal_lens/
 │   └── docker-compose.yml
 │
 └── README.md
-
-
+```
