@@ -8,19 +8,20 @@ async def get_metadata(region_name:str,aws_access_key_id:str,aws_secret_access_k
     # In the next step, I just extract all the files(objects) which end with .metadata.json as that is supposed to be unique
     #Then the metadata is parsed accordingly
     response = s3_client.list_objects_v2(Bucket=bucket_name)
+    r1 = list()
     val = ""
     if 'Contents' in response:
         for obj in response['Contents']:
-            if obj['Key'].endswith('.metadata.json'):
+            if obj['Key'].endswith('metadata.json'):
                 val = obj['Key']
-
-    try:
-        response = s3_client.get_object(Bucket=bucket_name, Key=val)
-        metadata_content = response['Body'].read().decode('utf-8')
-        metadata_json = json.loads(metadata_content)
+                try:
+                    response = s3_client.get_object(Bucket=bucket_name, Key=val)
+                    metadata_content = response['Body'].read().decode('utf-8')
+                    metadata_json = json.loads(metadata_content)
+                    r1.append(metadata_json)
+                except Exception as e:
+                    print(str(e))
+                    return None
+    return r1
         # print(metadata_json)
         # print(type(metadata_json),type(metadata_content))
-        return metadata_json
-    except Exception as e:
-        print(str(e))
-        return None
