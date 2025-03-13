@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+typing-extensions
+
+# Data processing & file format support
+pyarrow
+pyiceberg
+hudi
+delta-spark
