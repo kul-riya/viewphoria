@@ -14,7 +14,7 @@ import { Typewriter } from "react-simple-typewriter";
 import * as THREE from "three";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
-// Enhanced floating particles keeping the original style
+// Floating particles in the sky
 const FloatingParticles = () => {
   const particlesRef = useRef<THREE.Points>(null);
 
@@ -31,7 +31,7 @@ const FloatingParticles = () => {
   );
 };
 
-// Enhanced rotating globe
+// This is the globe that rotates hehe..
 const RotatingGlobe = () => {
   const globeRef = useRef<THREE.Mesh>(null);
 
@@ -61,7 +61,7 @@ const OnBoarding: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading
+    // This is just to simulate loading and render the backend components properly for all devices and configurations!!
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
