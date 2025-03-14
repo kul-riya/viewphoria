@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 const tempData = {
   file_count: 32,
   total_size: 2103,
-  record_count: 1000000000,
+  record_count: 1000,
   columns: [
     {
       name: "year",
@@ -24,9 +24,9 @@ const tempData = {
 };
 export default function MetadataOverviewTable() {
   return (
-    <Card className="bg-purple-800 text-white w-full max-w-3xl mx-auto shadow-lg rounded-2xl">
+    <Card className="bg-purple-800 text-white w-full max-w-3xl mx-auto shadow-lg rounded-2xl items-center align-middle text-center">
       <CardContent className="p-6">
-        <div className="flex justify-between text-center">
+        <div className="flex justify-around text-center">
           <div>
             <p className="text-xl font-semibold">{tempData.file_count}</p>
             <p className="text-sm">File Count</p>
@@ -52,7 +52,7 @@ export default function MetadataOverviewTable() {
           {tempData.columns.map((col, index) => (
             <div
               key={index}
-              className="grid grid-cols-3 text-sm mt-2 border-b border-white/20 py-2"
+              className="grid grid-cols-3 text-sm mt-2 border-b border-white/28 py-2"
             >
               <p>{col.name}</p>
               <p>{col.datatype}</p>
