@@ -3,10 +3,10 @@ from pydantic import BaseModel
 
 # Attribute-1 Table Information
 class TableInfo(BaseModel):
-    name: str
-    location: str
+    name: str # file name
+    location: Optional[str] = None # path
     format: str
-    version: Optional[int] = None
+    version: Optional[Union[int, str]] = None
 
 # Attribute-2 Schema Information
 class SchemaField(BaseModel):
@@ -51,7 +51,7 @@ class RowGroup(BaseModel):
 class FileMetaData(BaseModel):
     file_path: str
     format: str
-    size_bytes: str
+    size_bytes: Union[int, float]
     row_count: Optional[int] = None
     row_groups: Optional[List[RowGroup]] = []
 

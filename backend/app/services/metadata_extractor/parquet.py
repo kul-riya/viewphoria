@@ -1,7 +1,7 @@
-
 import boto3
 import pyarrow.parquet as pq
 import io
+from services.standardizer import metadata_standardizer
 
 def get_parquet_metadata(access_key : str, secret_key : str, region_name : str, bucket_name : str):
     
@@ -26,7 +26,6 @@ def get_parquet_metadata(access_key : str, secret_key : str, region_name : str, 
     parquet_files = [
         obj["Key"] for obj in objects_list.get("Contents", []) if obj["Key"].endswith(".parquet")
     ]
-    print("Found Parquet Files:", parquet_files)
 
     # for each parquet key, extracting metadata
     for parquet_key in parquet_files:
@@ -53,8 +52,9 @@ def get_parquet_metadata(access_key : str, secret_key : str, region_name : str, 
 
         # # Extract column names
         # column_names = [pq_file.schema.names[i] for i in range(len(pq_file.schema.names))]
-        # print("\n Column Names:", column_names)
+        # print("\n Column Names:", column_names
+    metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name)
     return meta
 
 
-get_parquet_metadata()
+get_parquet_metadata(access_key="AKIA6IY36GTNWUWIDX4B", secret_key="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", region_name="ap-south-1", bucket_name="csi-fries")

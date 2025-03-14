@@ -1,0 +1,21 @@
+{
+    "metaData": {
+        "id": "1234567890abcdef",
+        "format": "parquet",
+        "schemaString": "{\"fields\": [{\"name\": \"id\", \"type\": \"integer\"}, {\"name\": \"name\", \"type\": \"string\"}, {\"name\": \"year\", \"type\": \"integer\"}, {\"name\": \"month\", \"type\": \"integer\"}]}",
+        "partitionColumns": [
+            "year",
+            "month"
+        ]
+    },
+    "actions": [
+        {
+            "add": {
+                "path": "year=2023/month=1/part-00000-abcdef.snappy.parquet",
+                "size": 1289,
+                "modificationTime": 1700000000000,
+                "dataChange": true
+            }
+        }
+    ]
+}

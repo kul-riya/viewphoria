@@ -1,21 +1,19 @@
 from fastapi import FastAPI
-import uvicorn
-from api.routes.metadata import metadatarouter
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from app.api.routes.metadata import router as metadata_router
 
-class ApiServer:
-    def __init__(self):
-        self.app = FastAPI()
+app = FastAPI(title="Baadal Lens API")
 
-        self.app.include_router(metadatarouter, prefix="/metadata")
-        
-        @self.app.get("/")
-        async def read_root():
-            return {"Hello World"}
-        
-    def run(self, host="0.0.0.0", port=8000):
-        uvicorn.run(self.app, host=host, port=port)
 
-server = ApiServer()
+# API routes
+app.include_router(metadata_router, prefix="/metadata", tags=["Metadata"])
 
-if __name__ == "__main__":
-    server.run()
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to Baadal Lens API"}
+
+@app.get("/frontend")
+async def serve_frontend():
+    return {"Hello Frontend"}

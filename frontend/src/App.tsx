@@ -1,4 +1,4 @@
-import Home from "./pages/Home";
+import DataInputPage from "./pages/DataInputPage";
 import OnBoarding from "./pages/OnBoarding";
 import { Route, Routes } from "react-router";
 
@@ -6,7 +6,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<OnBoarding />} />
-      <Route path="/home" element={<Home />} />
+      <Route path="/data_input" element={<DataInputPage />} />
       {/* More routes can be added with the similar syntax, i.e just duplicate the Route tag and provide path and element  */}
     </Routes>
   );
