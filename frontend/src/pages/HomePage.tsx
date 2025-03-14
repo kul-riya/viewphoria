@@ -1,9 +1,10 @@
 import React from "react";
+import PartitionMetadataViewer from "../components/layout/Metadata_Partition";
 
 const HomePage: React.FC = () => {
   return (
     <div>
-      <h1>Welcome to home page</h1>
+      <PartitionMetadataViewer />
     </div>
   );
 };
