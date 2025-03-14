@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { BadgeInfo, FileText, MapPin, Maximize2 } from "lucide-react";
+import { BadgeInfo, FileText, Maximize2 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { useState } from "react";
 import SummaryCard from "./Summary_Card";
@@ -26,11 +26,11 @@ const PartitionMetadataViewer = () => {
   const partitionsData = {
     numberOfPartitions: 4,
     partitionSpec: "year/month/day",
-    largestPartition: "2023/12/31",
-    smallestPartition: "2022/01/01",
+    largestPartition: "2023_12_31",
+    smallestPartition: "2022_01_01",
     partitions: [
       {
-        key: "2023/12/31",
+        key: "2023_12_31",
         size: "245 MB",
         location: "s3://my-bucket/data/year=2023/month=12/day=31",
         files: 56,
@@ -63,15 +63,32 @@ const PartitionMetadataViewer = () => {
       },
     ],
   };
-  const [summaryState, setSummaryState] = useState(
-    partitionsData.partitions[0]
-  );
+
+  const [summaryState, setSummaryState] = useState({
+    partitionSpec: partitionsData.partitionSpec,
+    largestPartition: partitionsData.largestPartition,
+    smallestPartition: partitionsData.smallestPartition,
+    numberPartitions: partitionsData.numberOfPartitions,
+    partitionKey: undefined,
+    partitionName: undefined,
+    location: undefined,
+  });
+
+  const handleCardClick = (partition, name) => {
+    setSummaryState({
+      ...summaryState,
+      partitionKey: partition.key,
+      partitionName: name,
+      largestPartition: partition.size,
+      location: partition.location,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 ">
       <div className="max-w-6xl mx-auto ">
         {/* Summary Card */}
-        <SummaryCard partitionsData={{ name: "Hello" }} />
+        <SummaryCard partitionData={summaryState} />
 
         <TreeConnector />
 
@@ -81,6 +98,7 @@ const PartitionMetadataViewer = () => {
             <Card
               key={index}
               className="bg-gray-800 text-white shadow-md lg:mt-24 hover:shadow-amber-100 hover:shadow-md hover:ring-2"
+              onClick={() => handleCardClick(partition, `partition ${index}`)}
             >
               <CardHeader className="pb-2">
                 <CardTitle className="text-purple-300 flex items-center gap-2">
@@ -105,14 +123,6 @@ const PartitionMetadataViewer = () => {
 
                 <div>
                   <div className="text-sm text-gray-400 flex items-center gap-2 mb-1">
-                    <MapPin size={14} />
-                    Location
-                  </div>
-                  <div className="text-xs truncate">{partition.location}</div>
-                </div>
-
-                <div>
-                  <div className="text-sm text-gray-400 flex items-center gap-2 mb-1">
                     <FileText size={14} />
                     Files
                   </div>
@@ -126,11 +136,8 @@ const PartitionMetadataViewer = () => {
                   <div className="text-xs">
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        ID: {partition.minValues.id} - {partition.maxValues.id}
-                      </div>
-                      <div>
-                        Time: {partition.minValues.timestamp.substring(11, 19)}{" "}
-                        - {partition.maxValues.timestamp.substring(11, 19)}
+                        Cost : {partition.minValues.id} -{" "}
+                        {partition.maxValues.id}
                       </div>
                     </div>
                   </div>
