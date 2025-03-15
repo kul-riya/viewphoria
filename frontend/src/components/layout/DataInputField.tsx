@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
-const DataInputPage: React.FC = () => {
+const DataInputField: React.FC = () => {
   const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const [structureType, setStructureType] = useState('Parquet');
   const [cloudProvider, setCloudProvider] = useState('');
   const [isProtected, setIsProtected] = useState(false);
@@ -22,46 +19,7 @@ const DataInputPage: React.FC = () => {
 
   return (
     <div className="relative h-screen w-screen bg-gray-900 overflow-hidden">
-      <AnimatePresence>
-        {isLoading ? (
-          <motion.div 
-            className="absolute inset-0 z-50 flex items-center justify-center bg-gray-900"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div 
-              className="w-10 h-10 border-4 border-t-purple-600 border-purple-200 rounded-full"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            />
-            <span className="ml-3 text-white font-light">Loading</span>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-      
-      <div className="absolute w-full h-full bg-gradient-to-b from-purple-900/30 to-transparent opacity-50"></div>
-      <div className="absolute top-0 w-full h-20 bg-gradient-to-b from-purple-900 to-transparent"></div>
 
-      <header className="relative z-10 flex justify-between items-center px-4 py-4 bg-gradient-to-r from-purple-900 to-purple-800 text-white">
-        <div className="flex items-center">
-          <div className="flex flex-col">
-            <span className="font-medium text-sm z-10 right-">CREDENTIAL</span>
-            <span className="text-xs">Management</span>
-          </div>
-        </div>
-        <div className="flex flex-col items-center">
-          <span className="font-medium text-sm">ADVANCED</span>
-          <span className="text-xs">Data Discovery</span>
-        </div>
-        <button className="rounded-full p-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-        </button>
-      </header>
-
-      {/* Main Content */}
       <main className="relative z-10 flex flex-col items-center justify-center h-[calc(100vh-64px)] px-4">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-medium text-white mb-6">Enter URI to start analyzing data files</h1>
@@ -175,4 +133,4 @@ const DataInputPage: React.FC = () => {
   );
 };
 
-export default DataInputPage;
+export default DataInputField;
