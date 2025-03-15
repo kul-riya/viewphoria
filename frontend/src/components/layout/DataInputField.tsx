@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 const DataInputField: React.FC<{ onFetch: () => void }> = ({ onFetch }) => {
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState("https://s3://peri-peri-fries/trial/test1.parquet");
   const [structureType, setStructureType] = useState("Parquet");
-  const [cloudProvider, setCloudProvider] = useState("");
+  const [cloudProvider, setCloudProvider] = useState("AWS");
   const [isProtected, setIsProtected] = useState(false);
   const [accessId, setAccessId] = useState("");
   const [secretKey, setSecretKey] = useState("");
