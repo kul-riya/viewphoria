@@ -117,7 +117,6 @@ const OnBoarding: React.FC = () => {
         </Suspense>
       </Canvas>
 
-      {/* Original gradient effects - responsive positioning */}
       <div className="absolute w-60 h-60 sm:w-80 sm:h-80 bg-purple-500 opacity-20 blur-[140px] rounded-full top-1/4 left-1/4 sm:left-1/3"></div>
       <div className="absolute w-60 h-60 sm:w-96 sm:h-96 bg-pink-500 opacity-20 blur-[120px] rounded-full bottom-1/4 right-1/4"></div>
 
@@ -149,7 +148,7 @@ const OnBoarding: React.FC = () => {
         >
           Welcome to
           <Typewriter 
-            words={[" Baadal Lens", " Future"]} 
+            words={[" Viewphoria", " Future"]} 
             loop 
             cursor 
             cursorStyle="_" 
