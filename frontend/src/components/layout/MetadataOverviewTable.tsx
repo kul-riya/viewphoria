@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/Card";
 
 const tempData = {
   file_count: 32,
@@ -24,7 +24,7 @@ const tempData = {
 };
 export default function MetadataOverviewTable() {
   return (
-    <Card className="bg-purple-800 text-white w-full max-w-3xl mx-auto shadow-lg rounded-2xl items-center align-middle text-center">
+    <Card className="bg-purple-800 text-white w-full mx-auto max-w-3xl shadow-lg rounded-2xl items-center align-middle text-center">
       <CardContent className="p-6">
         <div className="flex justify-around text-center">
           <div>
