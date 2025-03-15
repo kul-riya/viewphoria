@@ -1,6 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/common/navbar";
+import MetadataOverviewTable from "./components/layout/MetadataOverviewTable";
+import OnBoarding from "./pages/OnBoarding";
+import DataInputField from "./pages/DataInputField";
+
+
+
 
 function App() {
   return (
@@ -15,7 +21,9 @@ function App() {
           path="/advanced-data-discovery"
           element={<AdvancedDataDiscovery />}
         />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<OnBoarding />} />
+      <Route path="/data_input" element={<DataInputField />} />
+
       </Routes>
     </BrowserRouter>
   );
@@ -25,9 +33,7 @@ export default App;
 
 // Placeholder routes
 // change home
-function Home() {
-  return <div className="p-4">Home Page</div>;
-}
+
 
 function CredentialManagement() {
   return <div className="p-4">Credential Management Page</div>;
@@ -36,3 +42,4 @@ function CredentialManagement() {
 function AdvancedDataDiscovery() {
   return <div className="p-4">Advanced Data Discovery Page</div>;
 }
+
