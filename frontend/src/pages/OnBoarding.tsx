@@ -185,15 +185,6 @@ const OnBoarding: React.FC = () => {
               <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </motion.button>
-          
-          <motion.button
-            className="px-5 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-purple-500 text-white text-base sm:text-lg hover:cursor-pointer font-semibold tracking-wide rounded-full shadow-xl transition-all duration-300 hover:bg-purple-500/10"
-            whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(147, 51, 234, 0.3)" }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => navigate("/learn-more")}
-          >
-            Read Documentation
-          </motion.button>
         </motion.div>
         
         {/* Live users indicator */}

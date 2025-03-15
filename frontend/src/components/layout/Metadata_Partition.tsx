@@ -70,11 +70,11 @@ const PartitionMetadataViewer = () => {
     smallestPartition: partitionsData.smallestPartition,
     numberPartitions: partitionsData.numberOfPartitions,
     partitionKey: undefined,
-    partitionName: undefined,
+    partitionName: "",
     location: undefined,
   });
 
-  const handleCardClick = (partition, name) => {
+  const handleCardClick = (partition : any, name : string) => {
     setSummaryState({
       ...summaryState,
       partitionKey: partition.key,

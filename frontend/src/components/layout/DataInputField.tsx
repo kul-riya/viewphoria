@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const DataInputField: React.FC<{ onFetch: () => void }> = ({ onFetch }) => {
   const [url, setUrl] = useState("https://s3://peri-peri-fries/trial/test1.parquet");
