@@ -3,10 +3,7 @@ import "./App.css";
 import Navbar from "./components/common/navbar";
 import MetadataOverviewTable from "./components/layout/MetadataOverviewTable";
 import OnBoarding from "./pages/OnBoarding";
-import DataInputField from "./pages/DataInputField";
-
-
-
+import DataInputField from "./components/layout/DataInputField";
 
 function App() {
   return (
@@ -22,8 +19,6 @@ function App() {
           element={<AdvancedDataDiscovery />}
         />
         <Route path="/" element={<OnBoarding />} />
-      <Route path="/data_input" element={<DataInputField />} />
-
       </Routes>
     </BrowserRouter>
   );
@@ -34,7 +29,6 @@ export default App;
 // Placeholder routes
 // change home
 
-
 function CredentialManagement() {
   return <div className="p-4">Credential Management Page</div>;
 }
@@ -42,4 +36,3 @@ function CredentialManagement() {
 function AdvancedDataDiscovery() {
   return <div className="p-4">Advanced Data Discovery Page</div>;
 }
-
