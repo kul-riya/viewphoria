@@ -148,7 +148,7 @@ const OnBoarding: React.FC = () => {
         >
           Welcome to
           <Typewriter 
-            words={[" Viewphoria", " Future"]} 
+            words={[" Viewphoria", " The Future"]} 
             loop 
             cursor 
             cursorStyle="_" 
@@ -178,7 +178,7 @@ const OnBoarding: React.FC = () => {
             className="px-5 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:cursor-pointer hover:to-purple-900 text-white text-base sm:text-lg font-semibold tracking-wide rounded-full shadow-xl transition-all duration-300 flex items-center justify-center"
             whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(147, 51, 234, 0.5)" }}
             whileTap={{ scale: 0.96 }}
-            onClick={() => navigate("/data_input")}
+            onClick={() => navigate("/home")}
           >
             <span>Get Started</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
