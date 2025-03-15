@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
 const DataInputField: React.FC = () => {
   const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const [structureType, setStructureType] = useState('Parquet');
   const [cloudProvider, setCloudProvider] = useState('');
   const [isProtected, setIsProtected] = useState(false);
