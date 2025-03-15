@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "../ui/card";
 
 const tempData = {
   file_count: 32,
@@ -24,20 +24,20 @@ const tempData = {
 };
 export default function MetadataOverviewTable() {
   return (
-    <Card className="bg-purple-800 text-white w-full max-w-3xl mx-auto shadow-lg rounded-2xl items-center align-middle text-center">
+    <Card className="bg-transparent mb-12 text-white w-full mx-auto max-w-3xl shadow-lg rounded-2xl items-center align-middle text-center">
       <CardContent className="p-6">
         <div className="flex justify-around text-center">
           <div>
             <p className="text-xl font-semibold">{tempData.file_count}</p>
-            <p className="text-sm">File Count</p>
+            <p className="text-md">File Count</p>
           </div>
           <div>
             <p className="text-2xl font-bold">{tempData.total_size}MB</p>
-            <p className="text-sm">Total Size</p>
+            <p className="text-md">Total Size</p>
           </div>
           <div>
             <p className="text-xl font-semibold">{tempData.record_count}</p>
-            <p className="text-sm">Record Count</p>
+            <p className="text-md">Record Count</p>
           </div>
         </div>
 
