@@ -1,10 +1,21 @@
+# FastAPI & ASGI Server
 fastapi
 uvicorn
+
+# Data Validation
 pydantic
 typing-extensions
 
-# Data processing & file format support
+# AWS SDK (for S3 Access)
+boto3
+
+# Data Processing & File Formats
 pyarrow
 pyiceberg
 hudi
 delta-spark
+
+# Additional Utilities
+python-dotenv  # For managing environment variables
+loguru         # For better logging
+requests       # For API testing

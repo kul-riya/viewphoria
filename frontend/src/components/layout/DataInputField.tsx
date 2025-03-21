@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const DataInputField: React.FC = () => {
   const [url, setUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [structureType, setStructureType] = useState('Parquet');
   const [cloudProvider, setCloudProvider] = useState('');
   const [isProtected, setIsProtected] = useState(false);
