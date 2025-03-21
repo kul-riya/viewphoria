@@ -1,7 +1,7 @@
 import boto3
 import json
 from app.services.standardizer import metadata_standardizer
-def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str):
+def get_metadata_iceberg(region_name:str, aws_access_key_id:str, aws_secret_access_key:str, bucket_name:str):
     # s3 = boto3.resource(service_name='s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
     # object_name = 'iceberg_warehouse/'
     s3_client = boto3.client('s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)

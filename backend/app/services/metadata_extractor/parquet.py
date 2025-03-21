@@ -3,9 +3,9 @@ import pyarrow.parquet as pq
 import io
 from app.services.standardizer import metadata_standardizer
 
-def get_metadata_parquet(access_key : str, secret_key : str, region_name : str, bucket_name : str):
+def get_metadata_parquet(aws_access_key : str, aws_secret_access_key : str, region_name : str, bucket_name : str):
     
-    if not(access_key and secret_key and region_name and bucket_name):
+    if not(aws_access_key and aws_secret_access_key and region_name and bucket_name):
         print("Not enough data provided!")
         return
     
@@ -14,8 +14,8 @@ def get_metadata_parquet(access_key : str, secret_key : str, region_name : str, 
     # Create S3 Client
     s3 = boto3.client(
         "s3",
-        aws_access_key_id=access_key,
-        aws_secret_access_key=secret_key,
+        aws_access_key_id=aws_access_key,
+        aws_secret_access_key=aws_secret_access_key,
         region_name= region_name,
     )
 
