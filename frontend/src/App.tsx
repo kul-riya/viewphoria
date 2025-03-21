@@ -1,6 +1,8 @@
 import HomePage from "./pages/HomePage";
 import OnBoarding from "./pages/OnBoarding";
 import { Route, Routes } from "react-router";
+import MetadataOverviewTable from "./components/layout/MetadataOverviewTable";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (

@@ -1,6 +1,7 @@
 import boto3
 import json
-async def get_metadata(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str):
+from app.services.standardizer import metadata_standardizer
+def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str):
     # s3 = boto3.resource(service_name='s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
     # object_name = 'iceberg_warehouse/'
     s3_client = boto3.client('s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
@@ -22,6 +23,6 @@ async def get_metadata(region_name:str,aws_access_key_id:str,aws_secret_access_k
                 except Exception as e:
                     print(str(e))
                     return None
-    return r1
-        # print(metadata_json)
-        # print(type(metadata_json),type(metadata_content))
+    unified_metadata = metadata_standardizer(file_format="iceberg", metadata=r1, bucket=bucket_name)
+
+    return unified_metadata
