@@ -16,7 +16,7 @@ type Props = {
 
 const SummaryCard = (props: Props) => {
   return (
-    <Card className="w-full bg-blue-600 text-white shadow-lg relative overflow-hidden lg:mb-0 mb-8">
+    <Card className="w-full bg-linear-to-t from-sky-500 to-indigo-500 text-white shadow-lg relative overflow-hidden lg:mb-0 mb-8 opacity-90">
       {props.partitionData.partitionKey ? (
         <h1 className="text-center text-2xl font-bold">Partition Details</h1>
       ) : (
@@ -41,7 +41,7 @@ const SummaryCard = (props: Props) => {
                 Max No. of Files in Single Partition - 56
               </div>
             </div>
-            <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
+            <div className="absolute right-8 top-1/2 transform -translate-y-1/2 lg:block hidden">
               <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center">
                 <div className="text-xl font-bold text-center">
                   <p className="text-lg">Total Partitions</p>
@@ -69,7 +69,7 @@ const SummaryCard = (props: Props) => {
                 Partition location - {props.partitionData.location}
               </div>
             </div>
-            <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
+            <div className="absolute right-8 top-1/2 transform -translate-y-1/2 lg:block hidden">
               <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center">
                 <div className="text-xl font-bold text-center">
                   <p className="text-lg">Total Partitions</p>
