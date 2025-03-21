@@ -57,7 +57,6 @@ async def retrieve_metadata(request: MetadataRequestAWS):
         
         elif request.file_type == "iceberg":
             unified_metadata_iceberg = get_metadata_iceberg(aws_access_key_id=params['iam_access_id'], aws_secret_access_key=params["iam_secret_access_key"], region_name=params["region_name"], bucket_name=params["bucket_name"])
-
             return MetadataResponse(
                 metadata=unified_metadata_iceberg,
                 status=200,
@@ -68,6 +67,7 @@ async def retrieve_metadata(request: MetadataRequestAWS):
             return []
     
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 

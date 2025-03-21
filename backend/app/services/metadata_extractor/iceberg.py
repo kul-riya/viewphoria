@@ -23,6 +23,7 @@ def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access
                 except Exception as e:
                     print(str(e))
                     return None
+    print(r1)
     unified_metadata = metadata_standardizer(file_format="iceberg", metadata=r1, bucket=bucket_name)
 
     return unified_metadata
