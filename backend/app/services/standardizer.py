@@ -21,6 +21,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
             table_info = TableInfo(
                 name=f"Parquet_File_{idx+1}",
                 format="parquet",
+                location= file_meta["location"],
                 created_by=file_meta.get("created_by", "Unknown"),
                 version=file_meta.get("format_version", "Unknown")
             )
@@ -135,9 +136,9 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
             total_rows = 0
             for snap in metadata_json.get("snapshots", []):
                 if "summary" in snap:
-                    total_files += snap["summary"].get("total-data-files", 0)
+                    total_files += int(snap["summary"].get("total-data-files", 0))
                     if "total-records" in snap["summary"]:
-                        total_rows += snap["summary"]["total-records"]
+                        total_rows += int(snap["summary"]["total-records"])
 
             if total_files > 0:
                 files_list.append(FileMetaData(
