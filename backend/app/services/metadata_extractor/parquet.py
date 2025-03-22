@@ -110,4 +110,3 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
 #     unified_metadata = metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name)
 
 #     return unified_metadata
-

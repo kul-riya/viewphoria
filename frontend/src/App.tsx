@@ -1,3 +1,4 @@
+import DataInputField from "./components/layout/DataInputField";
 import HomePage from "./pages/HomePage";
 import OnBoarding from "./pages/OnBoarding";
 import { Route, Routes } from "react-router";
