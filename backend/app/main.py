@@ -6,6 +6,9 @@ from typing import Literal, Union
 from datetime import datetime
 from app.services.metadata_extractor.parquet import get_metadata_parquet
 from app.services.metadata_extractor.iceberg import get_metadata_iceberg
+from app.db.db import get_db,close_db
+from sqlalchemy import text
+import asyncio
 
 app = FastAPI(title="Baadal Lens API")
 
@@ -32,6 +35,7 @@ async def root():
 @app.get("/frontend")
 async def serve_frontend():
     return {"Hello Frontend"}
+    
 
 @app.post("/api/aws/metadata", response_model=MetadataResponse)
 async def retrieve_metadata(request: MetadataRequestAWS):
@@ -72,3 +76,10 @@ async def retrieve_metadata(request: MetadataRequestAWS):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get('/run-query')
+async def run_query():
+    async for session in get_db():
+        result = await session.execute(text("SELECT 'Hello from Neon'"))
+        data = result.scalar()
+        return {"message":data}
+    return "worked"
