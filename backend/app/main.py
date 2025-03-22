@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException,Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
@@ -6,6 +6,7 @@ from typing import Literal, Union
 from datetime import datetime
 from app.services.metadata_extractor.parquet import get_metadata_parquet
 from app.services.metadata_extractor.iceberg import get_metadata_iceberg
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.db import get_db,close_db
 from sqlalchemy import text
 import asyncio
@@ -78,8 +79,8 @@ async def retrieve_metadata(request: MetadataRequestAWS):
 
 @app.get('/run-query')
 async def run_query():
-    async for session in get_db():
-        result = await session.execute(text("SELECT 'Hello from Neon'"))
-        data = result.scalar()
-        return {"message":data}
-    return "worked"
+    session:AsyncSession = await Depends(get_db)
+    result = await session.execute(text("SELECT 'Hello from Neon'"))
+    data = result.scalar()
+    return {"message":data}
+
