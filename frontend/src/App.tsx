@@ -1,4 +1,4 @@
-import DataInputField from "./pages/DataInputField";
+import DataInputField from "./components/layout/DataInputField";
 import OnBoarding from "./pages/OnBoarding";
 import { Route, Routes } from "react-router";
 import MetadataOverviewTable from "./components/layout/MetadataOverviewTable";
