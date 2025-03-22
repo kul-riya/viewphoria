@@ -5,6 +5,8 @@ from app.services.standardizer import metadata_standardizer
 import pyarrow.fs as fs
 
 
+
+## OFFERS A MUCH BETTER APPROACH, BUT FOR SOME REASON HAS NETWORK ERRORS WITH SOME BUCKETS
 def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str):
     if not (aws_access_key_id and aws_secret_access_key and region_name and bucket_name):
         raise ValueError("Missing required AWS credentials or bucket name!")
@@ -28,7 +30,7 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
         return []
 
     # Initialize S3 Filesystem for efficient metadata extraction
-    s3_fs = fs.S3FileSystem(region=region_name, aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+    s3_fs = fs.S3FileSystem(region=region_name, access_key=aws_access_key_id, secret_key=aws_secret_access_key)
 
     meta = []
     
@@ -36,20 +38,20 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
         try:
             # Use Arrow's S3FileSystem to read metadata without loading entire file
             pq_file = pq.ParquetFile(f"{bucket_name}/{parquet_key}", filesystem=s3_fs)
-            print(pq_file)
+            # print(pq_file)
             metadata = pq_file.metadata.to_dict() if pq_file.metadata else {}
-
+            metadata["location"] = parquet_key
+            meta.append(metadata)
             # Add filename to metadata
             # metadata["file_name"] = parquet_key
             meta.append(metadata)
 
         except Exception as e:
             print(f"Error reading metadata for {parquet_key}: {e}")
-    
+
     unified_metadata = metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name)
 
     return unified_metadata
-
 
 
 
@@ -88,7 +90,9 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
 #         # Load Parquet metadata
 #         pq_file = pq.ParquetFile(parquet_file)
 
-#         meta.append(pq_file.metadata.to_dict())
+#         pq_meta = pq_file.metadata.to_dict()
+#         pq_meta["location"] = parquet_key
+#         meta.append(pq_meta)
 #         # # Printing Metadata
 #         # print("\nParquet Metadata")
 #         # print(pq_file.metadata)
@@ -105,5 +109,5 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
 
 #     unified_metadata = metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name)
 
-    # return unified_metadata
+#     return unified_metadata
 
