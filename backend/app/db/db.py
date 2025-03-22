@@ -15,7 +15,6 @@ engine = create_async_engine(f"postgresql+asyncpg://{db_url.username}:{db_url.pa
 AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 # This is a convention to yeild the session maker to access it in other files
-
 async def get_db():
     async with AsyncSessionLocal() as session:
         yield session
@@ -24,10 +23,40 @@ async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-asyncio.run(init_db())
+# asyncio.run(init_db())
 
 async def close_db():
     await engine.dispose()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## This is test code to connect to neon
 
