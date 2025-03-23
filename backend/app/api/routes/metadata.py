@@ -1,9 +1,15 @@
-from fastapi import APIRouter, HTTPException
-from app.services.metadata_extractor.parquet import get_metadata_parquet
-from app.services.metadata_extractor.iceberg import get_metadata_iceberg
+from fastapi import APIRouter,Depends,HTTPException
+import json
+from app.db.db import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+import uuid
 from pydantic import BaseModel, Field
 from typing import Literal, Union
 from datetime import datetime
+from app.services.meta_data_main import get_metadata
+from app.services.storage_service import create_metadata
+from app.models.metadata import Meta_data
+
 
 class MetadataRequestAWS(BaseModel):
     file_type: Literal["parquet", "iceberg", "delta", "hudi"]
@@ -21,41 +27,27 @@ class MetadataResponse(BaseModel):
 
 router = APIRouter(prefix="/api")
 
-@router.get("/metadata/fetch_metadata_aws")
-async def get_metadata(request: MetadataRequestAWS):
-    try:
-        params = {
-            "file_type": request.file_type,
-            "file_path": request.file_path,
-            "is_protected": request.is_protected,
-            "region_name": request.region_name,
-            "bucket_name": request.bucket_name,
-            "iam_access_id": request.iam_access_id,
-            "iam_secret_access_key": request.iam_secret_access_key
-        }
-        metadata = []
-        if request.file_type == "parquet":
-            print("here")
-            unified_metadata_parquet = get_metadata_parquet(aws_access_key_id=params["iam_access_id"], aws_secret_access_key=params["iam_secret_access_key"], region_name=params["region_name"], bucket_name=params["bucket_name"])
-
-            return MetadataResponse(
-                metadata=unified_metadata_parquet,
-                status=200,
-                server_timestamp=datetime.now()
-            )
-        
-        elif request.file_type == "iceberg":
-            unified_metadata_iceberg = get_metadata_iceberg(aws_access_key_id=params['iam_access_id'], aws_secret_access_key=params["iam_secret_access_key"], region_name=params["region_name"], bucket_name=params["bucket_name"])
-            return MetadataResponse(
-                metadata=unified_metadata_iceberg,
-                status=200,
-                server_timestamp=datetime.now()
-            )
-        
-        else:
-            return []
+@router.get("/aws/metadata")
+async def fetch_metadata_aws(request: MetadataRequestAWS):
+    res = await get_metadata(request)
+    return res
     
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=500, detail=str(e))
 
+
+@router.post("/metadata/add_metadata_to_db")
+async def add_metadata_to_db(request: MetadataRequestAWS,db:AsyncSession = Depends(get_db)):
+    try:
+        res = await get_metadata(request)
+        res = dict(res)
+        res = json.dumps(res, indent=4, default=str)
+        id = str(uuid.uuid4())
+        file_type = request.file_type
+        Bucket_name = request.bucket_name
+        object_id_aws = str(uuid.uuid4())
+        new_data = Meta_data(id=id,file_type=file_type,object_id_aws=object_id_aws,meta_data=res,Bucket_name=Bucket_name)
+        final_res = await create_metadata(new_data,db)
+        print(final_res.meta_data)
+        return {"status": 200, "message": "Metadata added successfully to database", "data": json.loads(final_res.meta_data)}
+    except Exception as e:
+        print(str(e))
+        return HTTPException(status_code=400, detail="Error in adding metadata to db")

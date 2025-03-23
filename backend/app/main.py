@@ -22,19 +22,19 @@ async def serve_frontend():
     return {"Hello Frontend"}
     
 
-@app.get('/run-query')
-async def run_query(db: AsyncSession = Depends(get_db)):
-    try:
-        with open('v1.metadata.json') as f:
-            data = json.load(f)
-            id = str(uuid.uuid4())
-            file_type = "iceberg"
-            object_id_aws = "s3://segfaultsurvivor//content/iceberg_warehouse/default/cancer_table"
-            Bucket_name = "segfaultsurvivor"
-            new_data = Meta_data(id=id,file_type=file_type,object_id_aws=object_id_aws,meta_data=data,Bucket_name=Bucket_name)
-            res = await create_metadata(new_data,db)
-            return "Hello"
-    except Exception as e:
-        print(e)
-        return ""
+# @app.get('/run-query')
+# async def run_query(db: AsyncSession = Depends(get_db)):
+#     try:
+#         with open('v1.metadata.json') as f:
+#             data = json.load(f)
+#             id = str(uuid.uuid4())
+#             file_type = "iceberg"
+#             object_id_aws = "s3://segfaultsurvivor//content/iceberg_warehouse/default/cancer_table"
+#             Bucket_name = "segfaultsurvivor"
+#             new_data = Meta_data(id=id,file_type=file_type,object_id_aws=object_id_aws,meta_data=data,Bucket_name=Bucket_name)
+#             res = await create_metadata(new_data,db)
+#             return "Hello"
+#     except Exception as e:
+#         print(e)
+#         return ""
     
