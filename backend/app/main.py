@@ -1,28 +1,16 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from pydantic import BaseModel, Field
-from typing import Literal, Union
-from datetime import datetime
-from app.services.metadata_extractor.parquet import get_metadata_parquet
-from app.services.metadata_extractor.iceberg import get_metadata_iceberg
+import json
+from fastapi import FastAPI,Depends
+from app.api.routes.metadata import router as metadata_router
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.db.db import get_db,close_db
+from app.models.metadata import Meta_data
+from sqlalchemy import false, null, text, true
+from app.services.storage_service import create_metadata
+import uuid
+from fastapi.encoders import jsonable_encoder
 
 app = FastAPI(title="Baadal Lens API")
-
-
-class MetadataRequestAWS(BaseModel):
-    file_type: Literal["parquet", "iceberg", "delta", "hudi"]
-    file_path: str = Field(..., pattern=r"^s3://[a-zA-Z0-9./_-]+$")
-    is_protected: bool
-    iam_access_id: str
-    iam_secret_access_key: str
-    region_name: str
-    bucket_name: str
-
-class MetadataResponse(BaseModel):
-    metadata: Union[dict, list]
-    status: int
-    server_timestamp: datetime
+app.include_router(metadata_router)
 
 
 @app.get("/")
@@ -32,42 +20,21 @@ async def root():
 @app.get("/frontend")
 async def serve_frontend():
     return {"Hello Frontend"}
-
-@app.post("/api/aws/metadata", response_model=MetadataResponse)
-async def retrieve_metadata(request: MetadataRequestAWS):
-    try:
-        params = {
-            "file_type": request.file_type,
-            "file_path": request.file_path,
-            "is_protected": request.is_protected,
-            "region_name": request.region_name,
-            "bucket_name": request.bucket_name,
-            "iam_access_id": request.iam_access_id,
-            "iam_secret_access_key": request.iam_secret_access_key
-        }
-        metadata = []
-        if request.file_type == "parquet":
-            unified_metadata_parquet = get_metadata_parquet(aws_access_key_id=params["iam_access_id"], aws_secret_access_key=params["iam_secret_access_key"], region_name=params["region_name"], bucket_name=params["bucket_name"])
-
-            return MetadataResponse(
-                metadata=unified_metadata_parquet,
-                status=200,
-                server_timestamp=datetime.now()
-            )
-        
-        elif request.file_type == "iceberg":
-            unified_metadata_iceberg = get_metadata_iceberg(aws_access_key_id=params['iam_access_id'], aws_secret_access_key=params["iam_secret_access_key"], region_name=params["region_name"], bucket_name=params["bucket_name"])
-            return MetadataResponse(
-                metadata=unified_metadata_iceberg,
-                status=200,
-                server_timestamp=datetime.now()
-            )
-        
-        else:
-            return []
     
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=500, detail=str(e))
 
-
+# @app.get('/run-query')
+# async def run_query(db: AsyncSession = Depends(get_db)):
+#     try:
+#         with open('v1.metadata.json') as f:
+#             data = json.load(f)
+#             id = str(uuid.uuid4())
+#             file_type = "iceberg"
+#             object_id_aws = "s3://segfaultsurvivor//content/iceberg_warehouse/default/cancer_table"
+#             Bucket_name = "segfaultsurvivor"
+#             new_data = Meta_data(id=id,file_type=file_type,object_id_aws=object_id_aws,meta_data=data,Bucket_name=Bucket_name)
+#             res = await create_metadata(new_data,db)
+#             return "Hello"
+#     except Exception as e:
+#         print(e)
+#         return ""
+    

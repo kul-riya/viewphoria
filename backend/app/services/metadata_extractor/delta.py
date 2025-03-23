@@ -1,25 +1,25 @@
-import boto3
+import s3fs
 import json
 
 def get_delta_metadata(access_key: str, secret_key: str, region_name: str, bucket_name: str):
     
-    # Validate input parameters
     if not (access_key and secret_key and region_name and bucket_name):
         print("Invalid Credentials")
         return
     
-    # Initialize S3 Client
-    s3 = boto3.client(
-        "s3",
-        aws_access_key_id=access_key,
-        aws_secret_access_key=secret_key,
-        region_name=region_name
+    # Initialize S3FS filesystem
+    s3 = s3fs.S3FileSystem(
+        anon=False,
+        key=access_key,
+        secret=secret_key,
+        client_kwargs={'region_name': region_name}
     )
 
-    delta_prefix = "delta_lake/_delta_log/"
-    response = s3.list_objects_v2(Bucket=bucket_name, Prefix=delta_prefix)
+    delta_prefix = f"{bucket_name}/delta_lake/_delta_log/"
+    # List all files in the delta log directory
+    all_files = s3.ls(delta_prefix)
     json_files = sorted(
-        [obj["Key"] for obj in response.get("Contents", []) if obj["Key"].endswith(".json")]
+        [f for f in all_files if f.endswith('.json')]
     )
 
     print("Delta log files:", json_files)
@@ -31,10 +31,11 @@ def get_delta_metadata(access_key: str, secret_key: str, region_name: str, bucke
     latest_json_file = json_files[-1]
     print(f"Reading: {latest_json_file}")
 
-    log_obj = s3.get_object(Bucket=bucket_name, Key=latest_json_file)
-    log_content = log_obj["Body"].read().decode("utf-8")
+    # Read the file directly using s3fs
+    with s3.open(latest_json_file, 'r', encoding='utf-8') as log_file:
+        log_content = log_file.read()
 
-    print("Raw JSON content from S3:\n", log_content[:500])  
+    print("Raw JSON content from S3:\n", log_content)
 
     # JSON Parsing
     try:
@@ -43,6 +44,3 @@ def get_delta_metadata(access_key: str, secret_key: str, region_name: str, bucke
     except json.JSONDecodeError as e:
         print("JSON Decode Error:", e)
         return None
-
-# Call function
-log_data = get_delta_metadata(access_key="AKIA6IY36GTNWUWIDX4B", secret_key="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", region_name="ap-south-1", bucket_name="csi-fries")

@@ -1,0 +1,1 @@
+# This file will contain the user model with auth credentials and user details.
