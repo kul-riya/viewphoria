@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase,Mapped,mapped_column,relationship
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy import String,Enum
 import enum
 
@@ -13,12 +13,12 @@ class FileType(enum.Enum):
     delta = "delta"
 
 
-class Metadata(Base):
+class Meta_data(Base):
     __tablename__="Metadata"
     id:Mapped[str] = mapped_column(String(100),primary_key=True)
     file_type:Mapped["FileType"] = mapped_column(Enum(FileType),nullable=True)
     object_id_aws:Mapped[str] = mapped_column(String(100),nullable=True)
-    meta_data:Mapped[dict] = mapped_column(JSONB,nullable=True)
+    meta_data:Mapped[dict] = mapped_column(JSON ,nullable=True)
     Bucket_name:Mapped[str] = mapped_column(String(100),nullable=True)
 
     def print_metadata(self):
