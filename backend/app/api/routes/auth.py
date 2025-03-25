@@ -23,7 +23,6 @@ router = APIRouter(prefix="/api")
 @router.post("/auth/signup")
 async def signup(request: userSignup):
     savedUser = await user_signup(request.email,request.password,request.username)
-    print(savedUser.id)
     return {"status":200,"message":"User created successfully","token":create_token({"id":str(savedUser.id)}),"user":savedUser}
 
 
@@ -38,7 +37,6 @@ async def login(request: userLogin):
 async def check_auth(request:checkAuth):
     res = await isAuthenticated(request)
     if(res["user"]):
-        print(res['user'])
         return {"status":200,"data":res["user"]}
     else:
         raise HTTPException(401,detail="Unauthorized")

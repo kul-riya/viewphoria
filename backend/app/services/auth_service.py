@@ -25,11 +25,9 @@ async def isAuthenticated(request:Request):
 
 
 async def user_signup(email:str,password:str,username:str):
-    print(email)
     if(re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',email) == None):
         raise HTTPException(status_code=400, detail="Invalid email")
     foundUser =await User.find_one(User.email == email)
-    print(foundUser)
     if(foundUser!=None):
         raise HTTPException(status_code=400, detail="User already exists Please Login")
     foundUser = await User.find_one(User.username == username)
