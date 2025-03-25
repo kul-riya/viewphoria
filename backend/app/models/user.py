@@ -1,7 +1,7 @@
 from typing import List, Optional
 from beanie import Document, Indexed, Link
 from pydantic import Field
-from app.models.metadata import MetaData  # Assuming you have a similar metadata model
+from app.models.metadata import MetaData 
 
 class User(Document):
     username: str
