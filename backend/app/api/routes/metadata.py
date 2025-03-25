@@ -28,8 +28,6 @@ async def fetch_metadata_aws(request: MetadataRequestAWS,payload:dict=Depends(is
     return res
 
 
-## What my intention is to 
-
 @router.post("/metadata/add_metadata_to_db",dependencies=[Depends(isAuthenticated)])
 async def add_metadata_to_db(request: MetadataRequestAWS,payload:dict=Depends(isAuthenticated)):
     try:
