@@ -14,10 +14,6 @@ class userSignup(BaseModel):
 
 router = APIRouter(prefix="/api")
 
-# @router.post("/auth/login")
-# async def login(request: userLogin):
-#     email = request.email
-#     password = request.password
 
 @router.post("/auth/signup")
 async def signup(request: userSignup):
