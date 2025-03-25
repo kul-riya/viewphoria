@@ -34,8 +34,9 @@ async def fetch_metadata_aws(request: MetadataRequestAWS,payload:dict=Depends(is
 async def add_metadata_to_db(request: MetadataRequestAWS,payload:dict=Depends(isAuthenticated)):
     try:
         userid = payload['id']
-        foundUser = await User.get(ObjectId(userid))
-        print("The user is ",foundUser)
+        print(payload['id'])
+        foundUser = await User.get(userid)
+        print(foundUser)
         res = await get_metadata(request)
         res = dict(res)
         res = json.dumps(res, indent=4, default=str)

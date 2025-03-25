@@ -5,11 +5,13 @@ from app.models.user import User
 from app.services.token import validate_token
 import os
 import bcrypt
+from bson import ObjectId 
+
 
 load_dotenv()
 secret_string=os.getenv("SECRET_STRING")
 
-def isAuthenticated(request:Request):
+async def isAuthenticated(request:Request):
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Invalid token")
@@ -17,7 +19,9 @@ def isAuthenticated(request:Request):
     isTokenValid = validate_token(token)
     if not isTokenValid:
         raise HTTPException(status_code=401, detail="Invalid token")
-    return isTokenValid
+    userid = isTokenValid['id']
+    user = await User.get(ObjectId(userid))
+    return {"user":user,"id":userid}
 
 
 async def user_signup(email:str,password:str,username:str):
