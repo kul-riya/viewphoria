@@ -9,6 +9,7 @@ from datetime import datetime
 from app.services.meta_data_main import get_metadata
 from app.services.storage_service import create_metadata
 from app.models.metadata import Meta_data
+from app.db.db import init_db
 
 
 class MetadataRequestAWS(BaseModel):
@@ -37,6 +38,7 @@ async def fetch_metadata_aws(request: MetadataRequestAWS):
 @router.post("/metadata/add_metadata_to_db")
 async def add_metadata_to_db(request: MetadataRequestAWS,db:AsyncSession = Depends(get_db)):
     try:
+        await init_db()
         res = await get_metadata(request)
         res = dict(res)
         res = json.dumps(res, indent=4, default=str)

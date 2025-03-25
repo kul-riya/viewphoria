@@ -1,17 +1,14 @@
 import json
-from fastapi import FastAPI,Depends
+from fastapi import FastAPI
 from app.api.routes.metadata import router as metadata_router
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.db import get_db,close_db
-from app.models.metadata import Meta_data
-from sqlalchemy import false, null, text, true
-from app.services.storage_service import create_metadata
-import uuid
-from fastapi.encoders import jsonable_encoder
+from app.db.db import init_db
 
 app = FastAPI(title="Baadal Lens API")
 app.include_router(metadata_router)
 
+# @app.on_event("startup")
+# async def startup_event():
+#     await init_db()
 
 @app.get("/")
 async def root():
