@@ -1,8 +1,9 @@
 from typing import List, Optional, Dict, Union
 from pydantic import BaseModel
 import datetime
+
 # Attribute-1 Table Information
-class TableInfo(BaseModel):
+class DataInfo(BaseModel):
     name: str # file name
     location: Optional[str] = None # path
     format: str
@@ -22,6 +23,7 @@ class TableSchema(BaseModel):
 
 # Attribute-3 Partitioning
 class PartitionColumn(BaseModel):
+    field_id: Optional[Union[int, str]] = None
     name: str
     type: str
 
@@ -29,15 +31,16 @@ class Partitioning(BaseModel):
     type: Optional[str] = None  # Example: "hash", "list", "range"
     columns: List[PartitionColumn] = []
 
+
+
 # Attribute-4 Snapshot
-class Snapshot(BaseModel):
+class SnapshotFile(BaseModel):
     snapshot_id: str
     timestamp: str
     operation: str  # Append, overwrite, etc.
-    added_files: Optional[int] = 0
-    deleted_files: Optional[int] = 0
-    modified_files: Optional[int] = 0
-    manifest_list: Optional[str] = None
+    added_records: Optional[int] = 0
+    deleted_records: Optional[int] = 0
+    modified_records: Optional[int] = 0
 
 # Attribute-5 Row group, added a new class to represent grouping at file level
 class RowGroup(BaseModel):
@@ -48,20 +51,25 @@ class RowGroup(BaseModel):
     null_counts: Optional[Dict[str, int]] = None
 
 # Attribute-6 File Meta Data
+# if needs to be implemented for iceberg in future, parquet wll have to be passed
 class FileMetaData(BaseModel):
     file_path: str
     format: str
     size_bytes: Union[int, float]
     row_count: Optional[int] = None
-    row_groups: Optional[List[RowGroup]] = []
+    row_groups: Optional[List[RowGroup]] = [] # only for hudi and parquet data type
+    snapshot: Optional[List[SnapshotFile]] # only for hudi
 
-# Attribute-6 Multiple Metadata File Links for (Iceberg, Delta, and Hudi)
-class MetaDataFiles(BaseModel):
-    iceberg: Optional[Dict[str, List[str]]] = None
-    delta_log: Optional[List[str]] = None
-    hudi_timeline: Optional[List[str]] = None
+# Attribute-7 Multiple Metadata File Links for (Iceberg, Delta, and Hudi)
+class SnapshotMeta(BaseModel):
+    snapshot_id: str
+    timestamp: str
+    operation: str  # Append, overwrite, etc.
+    added_files: Optional[int] = 0
+    deleted_files: Optional[int] = 0
+    modified_files: Optional[int] = 0
 
-# Attribute-7 Table Properties
+# Attribute-8 Table Properties
 class TableProperties(BaseModel):
     write_format_default: Optional[str] = "parquet"
     compression: Optional[str] = "MIN"
@@ -71,10 +79,9 @@ class TableProperties(BaseModel):
 # Unified Metadata Model
 class UnifiedMetaData(BaseModel):
     link: str
-    table: TableInfo
+    info: DataInfo
     schema: TableSchema
     partitioning: Optional[Partitioning] = None
-    snapshots: Optional[List[Snapshot]] = []
+    snapshot_timeline: Optional[List[SnapshotMeta]] = []
     files: Optional[List[FileMetaData]] = []
-    metadata_files: Optional[MetaDataFiles] = None
     properties: Optional[TableProperties] = None
