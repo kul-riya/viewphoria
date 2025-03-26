@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
 import * as THREE from "three";
 import axios from "axios";
+import useAuthContext from "../hooks/useAuthContext";
 
 const FloatingParticles = React.memo(() => {
     const particlesRef = useRef<THREE.Points>(null);
@@ -88,6 +89,7 @@ const AuthPage: React.FC = () => {
 
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
+  const {dispatch} = useAuthContext();
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -96,7 +98,6 @@ const AuthPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const API_BASE_URL = "http://127.0.0.1:8000";
 
   const validateForm = () => {
     if (!email || !password) {
@@ -115,12 +116,13 @@ const AuthPage: React.FC = () => {
   // Login Handler
   const loginUser = async (email: string, password: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
         email,
         password,
       });
       const { token, user } = response.data;
       localStorage.setItem("token", token); // Store token for future requests
+      dispatch({type:"LOGIN",payload:response.data});
       return { success: true, message: "Login successful", user };
     } catch (error) {
       return { success: false, message: "Login failed" };
@@ -130,13 +132,14 @@ const AuthPage: React.FC = () => {
   // Signup Handler
   const signupUser = async (email: string, password: string, username: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/signup`, {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/signup`, {
         email,
         password,
         username,
       });
       const { token, user } = response.data;
       localStorage.setItem("token", token);
+      dispatch({type:"LOGIN",payload:response.data});
       return { success: true, message: "Signup successful", user };
     } catch (error) {
       return { success: false, message: "Signup failed" };
