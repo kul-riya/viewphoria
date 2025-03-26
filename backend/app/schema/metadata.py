@@ -1,6 +1,7 @@
 from typing import List, Optional, Dict, Union
 from pydantic import BaseModel
 import datetime
+import datetime
 # Attribute-1 Table Information
 class TableInfo(BaseModel):
     name: str # file name
@@ -13,6 +14,8 @@ class SchemaField(BaseModel):
     name: str
     type: str
     required: Optional[bool] = False
+    min_value: Optional[Union[int, float, str, datetime.date]] = None
+    max_value: Optional[Union[int, float, str, datetime.date]] = None
     min_value: Optional[Union[int, float, str, datetime.date]] = None
     max_value: Optional[Union[int, float, str, datetime.date]] = None
 

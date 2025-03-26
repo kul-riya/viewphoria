@@ -32,9 +32,7 @@ async def get_metadata(request: MetadataRequestAWS):
         }
         metadata = []
         if request.file_type == "parquet":
-            print("here")
             unified_metadata_parquet = get_metadata_parquet(aws_access_key_id=params["iam_access_id"], aws_secret_access_key=params["iam_secret_access_key"], region_name=params["region_name"], bucket_name=params["bucket_name"])
-
             return MetadataResponse(
                 metadata=unified_metadata_parquet,
                 status=200,
