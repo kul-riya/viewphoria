@@ -7,6 +7,7 @@ import useAuthContext from "./hooks/useAuthContext";
 import AuthPage from "./pages/AuthPage";
 
 function App() {
+  const {state} = useAuthContext();
   return (
     <>
       <Routes>
@@ -15,9 +16,7 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         {/* Temporary Routes to check out auth */}
         <Route path="/temp" element={<Temp />} />
-        <Route
-          path="/protected"
-        />
+        <Route path="/protected" element = {state.isAuthenticated ? <Protected/> : <AuthPage/>}/>
         {/* More routes can be added with the similar syntax, i.e just duplicate the Route tag and provide path and element  */}
       </Routes>
     </>

@@ -69,7 +69,7 @@ const DataInputField: React.FC<{ onFetch: () => void }> = ({ onFetch }) => {
             </div>
           </div>
 
-          <div className="flex items-center mb-6 justify-center">
+          <div className="flex items-center mb-1 justify-center">
             <span className="text-white mr-3 font-medium">Protected?</span>
             <div
               className={`relative inline-flex items-center h-6 rounded-full w-12 transition-colors ease-in-out duration-200 ${
