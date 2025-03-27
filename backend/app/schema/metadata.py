@@ -20,14 +20,30 @@ class SchemaField(BaseModel):
     min_value: Optional[Union[int, float, str, datetime.date]] = None
     max_value: Optional[Union[int, float, str, datetime.date]] = None
 
+
 class TableSchema(BaseModel):
     fields: List[SchemaField]
     evolution_supported: Optional[bool] = True
 
+
+# Attribute-7 Multiple Metadata File Links for (Iceberg, Delta, and Hudi)
+
+class SnapshotMeta(BaseModel):
+    snapshot_id: str
+    timestamp: int
+    operation: str  # Append, overwrite, etc.
+    added_files: Optional[int] = 0
+    total_size_bytes: Optional[int] = 0
+    total_records: Optional[int] = 0
+    changed_partition_count: Optional[int] = 0
+    deleted_files: Optional[int] = 0
+    modified_files: Optional[int] = 0
+
 # Attribute-3 Partitioning
 class PartitionColumn(BaseModel):
     field_id: Optional[Union[int, str]] = None
-    name: str
+    name: str # Vendor id
+    value: Optional[Union[int, float, str,datetime.datetime]] = None # Vendor id ka value
     type: str
 
 class Partitioning(BaseModel):
@@ -61,16 +77,9 @@ class FileMetaData(BaseModel):
     size_bytes: Union[int, float]
     row_count: Optional[int] = None
     row_groups: Optional[List[RowGroup]] = [] # only for hudi and parquet data type
+    partition: Partitioning = None # only for iceberg
     snapshot: Optional[List[SnapshotFile]] # only for hudi
 
-# Attribute-7 Multiple Metadata File Links for (Iceberg, Delta, and Hudi)
-class SnapshotMeta(BaseModel):
-    snapshot_id: str
-    timestamp: str
-    operation: str  # Append, overwrite, etc.
-    added_files: Optional[int] = 0
-    deleted_files: Optional[int] = 0
-    modified_files: Optional[int] = 0
 
 # Attribute-8 Table Properties
 class TableProperties(BaseModel):
@@ -80,6 +89,7 @@ class TableProperties(BaseModel):
     compaction_enabled: Optional[bool] = False
 
 # Unified Metadata Model
+
 class UnifiedMetaData(BaseModel):
     link: str
     info: DataInfo
