@@ -20,6 +20,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str, folder_
     unified_metadata_list = []
 
     if file_format == "parquet":
+        file_meta_data = []
         for idx, file_meta in enumerate(metadata):
             table_info = DataInfo(
                 name=f"Parquet_File_{idx+1}",
@@ -51,22 +52,22 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str, folder_
                 ) for rg in file_meta["row_groups"]
             ]
             file_path = f"s3://{bucket}/file_{idx+1}.parquet"
-
-            unified_metadata = UnifiedMetaData(
-                link=file_path,
-                table=table_info,
-                schema=table_schema,
-                files=[FileMetaData(
+            file_meta_data.append(FileMetaData(
                     file_path=file_path,
                     format="parquet",
                     size_bytes=file_meta.get("serialized_size", 0),
                     row_count=file_meta.get("num_rows", 0),
                     row_groups=row_groups
-                )]
-            )
+                ))
 
-            unified_metadata_list.append(unified_metadata.model_dump())
-        return unified_metadata_list
+        unified_metadata = UnifiedMetaData(
+            link=f"s3://{bucket}/{folder_name}",
+            table=table_info,
+            schema=table_schema,
+            files=file_meta_data
+        )
+
+        return unified_metadata
 
     elif file_format == "iceberg":
         for idx, metadata_json in enumerate(metadata):
