@@ -19,7 +19,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
 
     if file_format == "parquet":
         for idx, file_meta in enumerate(metadata):
-            table_info = TableInfo(
+            table_info = DataInfo(
                 name=f"Parquet_File_{idx+1}",
                 format="parquet",
                 location= file_meta["location"],
