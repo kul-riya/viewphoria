@@ -4,6 +4,7 @@ import PartitionMetadataViewer from "../components/layout/Metadata_Partition";
 import MetadataOverviewTable from "../components/layout/MetadataOverviewTable";
 import DataInputField from "../components/layout/DataInputField";
 import Navbar from "../components/common/Navbar";
+import SnapshotEvolutionTimeline from "../components/layout/SnapshotEvolutionTimeline";
 
 const HomePage: React.FC = () => {
   const [fetch, setFetch] = useState(false);
@@ -16,8 +17,8 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Navbar />
-
-      <div className="bg-slate-950 px-0.5 overflow-hidden min-h-screen flex flex-col items-center">
+      <div className="p-4 bg-slate-950 ">
+      <div className="px-0.5 overflow-hidden min-h-screen flex flex-col items-center">
         <motion.div
           className="w-full flex justify-center"
           initial={{ y: 0 }} // Initially centered
@@ -37,8 +38,10 @@ const HomePage: React.FC = () => {
           >
             <MetadataOverviewTable />
             <PartitionMetadataViewer />
+            <SnapshotEvolutionTimeline/>
           </motion.div>
         )}
+      </div>
       </div>
     </>
   );
