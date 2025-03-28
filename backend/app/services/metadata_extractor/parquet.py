@@ -49,7 +49,7 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
         except Exception as e:
             print(f"Error reading metadata for {parquet_key}: {e}")
 
-    unified_metadata = metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name)
+    unified_metadata = metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name,folder_name="")
 
     return unified_metadata
 
