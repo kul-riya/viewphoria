@@ -1,0 +1,629 @@
+[
+  {
+    "format-version": 2,
+    "table-uuid": "d03b4d58-b563-4e7c-8252-eef69baf6218",
+    "location": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis",
+    "last-sequence-number": 0,
+    "last-updated-ms": 1742995777363,
+    "last-column-id": 5,
+    "current-schema-id": 0,
+    "schemas": [
+      {
+        "type": "struct",
+        "schema-id": 0,
+        "fields": [
+          { "id": 1, "name": "vendor_id", "required": false, "type": "long" },
+          { "id": 2, "name": "trip_id", "required": false, "type": "long" },
+          {
+            "id": 3,
+            "name": "trip_distance",
+            "required": false,
+            "type": "float"
+          },
+          {
+            "id": 4,
+            "name": "fare_amount",
+            "required": false,
+            "type": "double"
+          },
+          {
+            "id": 5,
+            "name": "store_and_fwd_flag",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "default-spec-id": 0,
+    "partition-specs": [
+      {
+        "spec-id": 0,
+        "fields": [
+          {
+            "name": "vendor_id",
+            "transform": "identity",
+            "source-id": 1,
+            "field-id": 1000
+          }
+        ]
+      }
+    ],
+    "last-partition-id": 1000,
+    "default-sort-order-id": 0,
+    "sort-orders": [{ "order-id": 0, "fields": [] }],
+    "properties": {
+      "owner": "kul-riya",
+      "write.parquet.compression-codec": "zstd"
+    },
+    "current-snapshot-id": -1,
+    "refs": {},
+    "snapshots": [],
+    "statistics": [],
+    "partition-statistics": [],
+    "snapshot-log": [],
+    "metadata-log": []
+  },
+  {
+    "format-version": 2,
+    "table-uuid": "d03b4d58-b563-4e7c-8252-eef69baf6218",
+    "location": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis",
+    "last-sequence-number": 1,
+    "last-updated-ms": 1742995791652,
+    "last-column-id": 5,
+    "current-schema-id": 0,
+    "schemas": [
+      {
+        "type": "struct",
+        "schema-id": 0,
+        "fields": [
+          { "id": 1, "name": "vendor_id", "required": false, "type": "long" },
+          { "id": 2, "name": "trip_id", "required": false, "type": "long" },
+          {
+            "id": 3,
+            "name": "trip_distance",
+            "required": false,
+            "type": "float"
+          },
+          {
+            "id": 4,
+            "name": "fare_amount",
+            "required": false,
+            "type": "double"
+          },
+          {
+            "id": 5,
+            "name": "store_and_fwd_flag",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "default-spec-id": 0,
+    "partition-specs": [
+      {
+        "spec-id": 0,
+        "fields": [
+          {
+            "name": "vendor_id",
+            "transform": "identity",
+            "source-id": 1,
+            "field-id": 1000
+          }
+        ]
+      }
+    ],
+    "last-partition-id": 1000,
+    "default-sort-order-id": 0,
+    "sort-orders": [{ "order-id": 0, "fields": [] }],
+    "properties": {
+      "owner": "kul-riya",
+      "write.parquet.compression-codec": "zstd"
+    },
+    "current-snapshot-id": 8647997164462708420,
+    "refs": {
+      "main": { "snapshot-id": 8647997164462708420, "type": "branch" }
+    },
+    "snapshots": [
+      {
+        "sequence-number": 1,
+        "snapshot-id": 8647997164462708420,
+        "timestamp-ms": 1742995791652,
+        "summary": {
+          "operation": "append",
+          "spark.app.id": "local-1742995749929",
+          "added-data-files": "2",
+          "added-records": "4",
+          "added-files-size": "3255",
+          "changed-partition-count": "2",
+          "total-records": "4",
+          "total-files-size": "3255",
+          "total-data-files": "2",
+          "total-delete-files": "0",
+          "total-position-deletes": "0",
+          "total-equality-deletes": "0",
+          "engine-version": "3.5.5",
+          "app-id": "local-1742995749929",
+          "engine-name": "spark",
+          "iceberg-version": "Apache Iceberg 1.8.1 (commit 9ce0fcf0af7becf25ad9fc996c3bad2afdcfd33d)"
+        },
+        "manifest-list": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis/metadata/snap-8647997164462708420-1-c1a0dc36-440c-45b4-ae9e-667e7437792a.avro",
+        "schema-id": 0
+      }
+    ],
+    "statistics": [],
+    "partition-statistics": [],
+    "snapshot-log": [
+      { "timestamp-ms": 1742995791652, "snapshot-id": 8647997164462708420 }
+    ],
+    "metadata-log": [
+      {
+        "timestamp-ms": 1742995777363,
+        "metadata-file": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis/metadata/v1.metadata.json"
+      }
+    ]
+  },
+  {
+    "format-version": 2,
+    "table-uuid": "d03b4d58-b563-4e7c-8252-eef69baf6218",
+    "location": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis",
+    "last-sequence-number": 2,
+    "last-updated-ms": 1742997255005,
+    "last-column-id": 5,
+    "current-schema-id": 0,
+    "schemas": [
+      {
+        "type": "struct",
+        "schema-id": 0,
+        "fields": [
+          { "id": 1, "name": "vendor_id", "required": false, "type": "long" },
+          { "id": 2, "name": "trip_id", "required": false, "type": "long" },
+          {
+            "id": 3,
+            "name": "trip_distance",
+            "required": false,
+            "type": "float"
+          },
+          {
+            "id": 4,
+            "name": "fare_amount",
+            "required": false,
+            "type": "double"
+          },
+          {
+            "id": 5,
+            "name": "store_and_fwd_flag",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "default-spec-id": 0,
+    "partition-specs": [
+      {
+        "spec-id": 0,
+        "fields": [
+          {
+            "name": "vendor_id",
+            "transform": "identity",
+            "source-id": 1,
+            "field-id": 1000
+          }
+        ]
+      }
+    ],
+    "last-partition-id": 1000,
+    "default-sort-order-id": 0,
+    "sort-orders": [{ "order-id": 0, "fields": [] }],
+    "properties": {
+      "owner": "kul-riya",
+      "write.parquet.compression-codec": "zstd"
+    },
+    "current-snapshot-id": 4416607747856233513,
+    "refs": {
+      "main": { "snapshot-id": 4416607747856233513, "type": "branch" }
+    },
+    "snapshots": [
+      {
+        "sequence-number": 1,
+        "snapshot-id": 8647997164462708420,
+        "timestamp-ms": 1742995791652,
+        "summary": {
+          "operation": "append",
+          "spark.app.id": "local-1742995749929",
+          "added-data-files": "2",
+          "added-records": "4",
+          "added-files-size": "3255",
+          "changed-partition-count": "2",
+          "total-records": "4",
+          "total-files-size": "3255",
+          "total-data-files": "2",
+          "total-delete-files": "0",
+          "total-position-deletes": "0",
+          "total-equality-deletes": "0",
+          "engine-version": "3.5.5",
+          "app-id": "local-1742995749929",
+          "engine-name": "spark",
+          "iceberg-version": "Apache Iceberg 1.8.1 (commit 9ce0fcf0af7becf25ad9fc996c3bad2afdcfd33d)"
+        },
+        "manifest-list": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis/metadata/snap-8647997164462708420-1-c1a0dc36-440c-45b4-ae9e-667e7437792a.avro",
+        "schema-id": 0
+      },
+      {
+        "sequence-number": 2,
+        "snapshot-id": 4416607747856233513,
+        "parent-snapshot-id": 8647997164462708420,
+        "timestamp-ms": 1742997255005,
+        "summary": {
+          "operation": "append",
+          "spark.app.id": "local-1742995749929",
+          "added-data-files": "8",
+          "added-records": "86",
+          "added-files-size": "14293",
+          "changed-partition-count": "8",
+          "total-records": "90",
+          "total-files-size": "17548",
+          "total-data-files": "10",
+          "total-delete-files": "0",
+          "total-position-deletes": "0",
+          "total-equality-deletes": "0",
+          "engine-version": "3.5.5",
+          "app-id": "local-1742995749929",
+          "engine-name": "spark",
+          "iceberg-version": "Apache Iceberg 1.8.1 (commit 9ce0fcf0af7becf25ad9fc996c3bad2afdcfd33d)"
+        },
+        "manifest-list": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis/metadata/snap-4416607747856233513-1-26b90f57-d29b-4a7a-a856-804ae0536060.avro",
+        "schema-id": 0
+      }
+    ],
+    "statistics": [],
+    "partition-statistics": [],
+    "snapshot-log": [
+      { "timestamp-ms": 1742995791652, "snapshot-id": 8647997164462708420 },
+      { "timestamp-ms": 1742997255005, "snapshot-id": 4416607747856233513 }
+    ],
+    "metadata-log": [
+      {
+        "timestamp-ms": 1742995777363,
+        "metadata-file": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis/metadata/v1.metadata.json"
+      },
+      {
+        "timestamp-ms": 1742995791652,
+        "metadata-file": "/home/kul-riya/HACK/csi/hudi_data/warehouse/demo/nyc/taxis/metadata/v2.metadata.json"
+      }
+    ]
+  },
+  {
+    "format-version": 1,
+    "table-uuid": "f4ad8674-2b42-4b50-907a-9cb253fd44a9",
+    "location": "/content/iceberg_warehouse/default/cancer_table",
+    "last-updated-ms": 1741187775315,
+    "last-column-id": 28,
+    "schema": {
+      "type": "struct",
+      "schema-id": 0,
+      "fields": [
+        { "id": 1, "name": "Patient_ID", "required": false, "type": "int" },
+        { "id": 2, "name": "Country", "required": false, "type": "string" },
+        { "id": 3, "name": "Age", "required": false, "type": "int" },
+        { "id": 4, "name": "Gender", "required": false, "type": "string" },
+        {
+          "id": 5,
+          "name": "Cancer_Stage",
+          "required": false,
+          "type": "string"
+        },
+        { "id": 6, "name": "Tumor_Size_mm", "required": false, "type": "int" },
+        {
+          "id": 7,
+          "name": "Family_History",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 8,
+          "name": "Smoking_History",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 9,
+          "name": "Alcohol_Consumption",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 10,
+          "name": "Obesity_BMI",
+          "required": false,
+          "type": "string"
+        },
+        { "id": 11, "name": "Diet_Risk", "required": false, "type": "string" },
+        {
+          "id": 12,
+          "name": "Physical_Activity",
+          "required": false,
+          "type": "string"
+        },
+        { "id": 13, "name": "Diabetes", "required": false, "type": "string" },
+        {
+          "id": 14,
+          "name": "Inflammatory_Bowel_Disease",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 15,
+          "name": "Genetic_Mutation",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 16,
+          "name": "Screening_History",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 17,
+          "name": "Early_Detection",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 18,
+          "name": "Treatment_Type",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 19,
+          "name": "Survival_5_years",
+          "required": false,
+          "type": "string"
+        },
+        { "id": 20, "name": "Mortality", "required": false, "type": "string" },
+        {
+          "id": 21,
+          "name": "Healthcare_Costs",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "id": 22,
+          "name": "Incidence_Rate_per_100K",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "id": 23,
+          "name": "Mortality_Rate_per_100K",
+          "required": false,
+          "type": "int"
+        },
+        {
+          "id": 24,
+          "name": "Urban_or_Rural",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 25,
+          "name": "Economic_Classification",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 26,
+          "name": "Healthcare_Access",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 27,
+          "name": "Insurance_Status",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "id": 28,
+          "name": "Survival_Prediction",
+          "required": false,
+          "type": "string"
+        }
+      ]
+    },
+    "current-schema-id": 0,
+    "schemas": [
+      {
+        "type": "struct",
+        "schema-id": 0,
+        "fields": [
+          { "id": 1, "name": "Patient_ID", "required": false, "type": "int" },
+          { "id": 2, "name": "Country", "required": false, "type": "string" },
+          { "id": 3, "name": "Age", "required": false, "type": "int" },
+          { "id": 4, "name": "Gender", "required": false, "type": "string" },
+          {
+            "id": 5,
+            "name": "Cancer_Stage",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 6,
+            "name": "Tumor_Size_mm",
+            "required": false,
+            "type": "int"
+          },
+          {
+            "id": 7,
+            "name": "Family_History",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 8,
+            "name": "Smoking_History",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 9,
+            "name": "Alcohol_Consumption",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 10,
+            "name": "Obesity_BMI",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 11,
+            "name": "Diet_Risk",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 12,
+            "name": "Physical_Activity",
+            "required": false,
+            "type": "string"
+          },
+          { "id": 13, "name": "Diabetes", "required": false, "type": "string" },
+          {
+            "id": 14,
+            "name": "Inflammatory_Bowel_Disease",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 15,
+            "name": "Genetic_Mutation",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 16,
+            "name": "Screening_History",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 17,
+            "name": "Early_Detection",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 18,
+            "name": "Treatment_Type",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 19,
+            "name": "Survival_5_years",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 20,
+            "name": "Mortality",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 21,
+            "name": "Healthcare_Costs",
+            "required": false,
+            "type": "int"
+          },
+          {
+            "id": 22,
+            "name": "Incidence_Rate_per_100K",
+            "required": false,
+            "type": "int"
+          },
+          {
+            "id": 23,
+            "name": "Mortality_Rate_per_100K",
+            "required": false,
+            "type": "int"
+          },
+          {
+            "id": 24,
+            "name": "Urban_or_Rural",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 25,
+            "name": "Economic_Classification",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 26,
+            "name": "Healthcare_Access",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 27,
+            "name": "Insurance_Status",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "id": 28,
+            "name": "Survival_Prediction",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "partition-spec": [],
+    "default-spec-id": 0,
+    "partition-specs": [{ "spec-id": 0, "fields": [] }],
+    "last-partition-id": 999,
+    "default-sort-order-id": 0,
+    "sort-orders": [{ "order-id": 0, "fields": [] }],
+    "properties": { "owner": "root" },
+    "current-snapshot-id": 5926593608111056984,
+    "refs": {
+      "main": { "snapshot-id": 5926593608111056984, "type": "branch" }
+    },
+    "snapshots": [
+      {
+        "snapshot-id": 5926593608111056984,
+        "timestamp-ms": 1741187775315,
+        "summary": {
+          "operation": "append",
+          "spark.app.id": "local-1741187755969",
+          "added-data-files": "2",
+          "added-records": "167497",
+          "added-files-size": "1840641",
+          "changed-partition-count": "1",
+          "total-records": "167497",
+          "total-files-size": "1840641",
+          "total-data-files": "2",
+          "total-delete-files": "0",
+          "total-position-deletes": "0",
+          "total-equality-deletes": "0"
+        },
+        "manifest-list": "/content/iceberg_warehouse/default/cancer_table/metadata/snap-5926593608111056984-1-92f2eaf4-6382-45f9-9df1-0e65dd7dcfa9.avro",
+        "schema-id": 0
+      }
+    ],
+    "statistics": [],
+    "snapshot-log": [
+      { "timestamp-ms": 1741187775315, "snapshot-id": 5926593608111056984 }
+    ],
+    "metadata-log": []
+  }
+]

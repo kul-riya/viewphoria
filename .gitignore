@@ -4,3 +4,4 @@
 .dockerignore
 *.zip
 .env
+demo

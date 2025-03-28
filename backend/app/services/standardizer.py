@@ -19,7 +19,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
 
     if file_format == "parquet":
         for idx, file_meta in enumerate(metadata):
-            table_info = TableInfo(
+            table_info = DataInfo(
                 name=f"Parquet_File_{idx+1}",
                 format="parquet",
                 location= file_meta["location"],
@@ -71,7 +71,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
             table_location = metadata_json.get("location", "")
 
             # Table Info
-            table_info = TableInfo(
+            table_info = DataInfo(
                 name=metadata_json.get("name", f"Iceberg_Table_{idx + 1}"),
                 location=f"s3://{bucket}/{table_location}",
                 format="iceberg",
@@ -120,7 +120,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
                     if manifest_list_path and not manifest_list_path.startswith("s3://"):
                         manifest_list_path = f"s3://{bucket}/{manifest_list_path}"
 
-                    snapshot = Snapshot(
+                    snapshot = SnapshotFile(
                         snapshot_id=snapshot_id,
                         timestamp=str(snap.get("timestamp-ms", "")),
                         operation=snap.get("operation", "unknown"),
@@ -177,7 +177,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
                         ml_path = f"s3://{bucket}/{ml_path}"
                     manifest_lists.append(ml_path)
 
-            metadata_files = MetaDataFiles(
+            metadata_files = FileMetaData(
                 iceberg={
                     "metadata": [metadata_path],
                     "manifest_lists": manifest_lists,
@@ -215,7 +215,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
         # This is the table info
         table_location =  f"s3://{bucket}/delta_lake"
         table_name = meta_data["metaData"].get("name", "")
-        table_info = TableInfo(
+        table_info = DataInfo(
             name=table_name,
             location=table_location,
             format="delta",
@@ -263,7 +263,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
             # Snapshots
             snapshots_list = []
             if commit_info:
-                snapshot = Snapshot(
+                snapshot = SnapshotFile(
                     snapshot_id=str(commit_info["commitInfo"].get("timestamp", "")),
                     timestamp=str(commit_info["commitInfo"].get("timestamp", "")),
                     operation=commit_info["commitInfo"].get("operation", "unknown"),
@@ -299,7 +299,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str):
                 
             # MetaData Misc Files here
             delta_log_files = [f"s3://{bucket}/delta_lake/_delta_log/{f.split('/')[-1]}" for f in json_files] if 'json_files' in locals() else []
-            metadata_files = MetaDataFiles(
+            metadata_files = FileMetaData(
                 delta_log=delta_log_files,
             )
 

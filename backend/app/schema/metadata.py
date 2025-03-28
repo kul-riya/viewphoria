@@ -39,12 +39,17 @@ class SnapshotMeta(BaseModel):
     deleted_files: Optional[int] = 0
     modified_files: Optional[int] = 0
 
+
+
+
 # Attribute-3 Partitioning
 class PartitionColumn(BaseModel):
     field_id: Optional[Union[int, str]] = None
-    name: str # Vendor id
-    value: Optional[Union[int, float, str,datetime.datetime]] = None # Vendor id ka value
+    name: Optional[Union[str]] # Vendor id
+    value: List[Optional[Union[int, float, str,datetime.datetime]]] =[] # Vendor id ka value
     type: str
+
+
 
 class Partitioning(BaseModel):
     type: Optional[str] = None  # Example: "hash", "list", "range"
@@ -55,7 +60,7 @@ class Partitioning(BaseModel):
 # Attribute-4 Snapshot
 class SnapshotFile(BaseModel):
     snapshot_id: str
-    timestamp: str
+    timestamp: Optional[Union[int,str]] = None
     operation: str  # Append, overwrite, etc.
     added_records: Optional[int] = 0
     deleted_records: Optional[int] = 0
