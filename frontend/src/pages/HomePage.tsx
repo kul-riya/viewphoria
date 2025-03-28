@@ -1,49 +1,49 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion"; // Import motion from Framer Motion
-import PartitionMetadataViewer from "../components/layout/Metadata_Partition";
-import MetadataOverviewTable from "../components/layout/MetadataOverviewTable";
+import { Canvas } from "@react-three/fiber";
+import { Stars } from "@react-three/drei";
+import AppSidebar from "../components/layout/AppSidebar";
+import BackgroundScene from "../components/layout/BackgroundScene";
 import DataInputField from "../components/layout/DataInputField";
 import Navbar from "../components/common/Navbar";
 import SnapshotEvolutionTimeline from "../components/layout/SnapshotEvolutionTimeline";
+
 
 const HomePage: React.FC = () => {
   const [fetch, setFetch] = useState(false);
 
   const handleFetch = () => {
-    console.log(fetch);
-    setFetch(true);
+    // Things to do 
+    // Show a loader
+    // Pass the Data to Backend in the RequestedFormat via Axios
+    // Get the Requested Schema
+    // Set the Schema to All the Components
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="p-4 bg-slate-950 ">
-      <div className="px-0.5 overflow-hidden min-h-screen flex flex-col items-center">
-        <motion.div
-          className="w-full flex justify-center"
-          initial={{ y: 0 }} // Initially centered
-          animate={{ y: fetch ? -100 : 0 }} // Move up when fetch is true
-          transition={{ duration: 0.5, ease: "easeInOut" }} // Smooth transition
-        >
-          <DataInputField onFetch={handleFetch} />
-        </motion.div>
+    <div className="relative h-screen w-screen bg-[#090012] flex overflow-hidden">
 
-        {fetch && (
-          <motion.div
-            key="Display-After-Fetch"
-            className="w-full"
-            initial={{ opacity: 0, y: 20 }} // Start invisible & slightly lower
-            animate={{ opacity: 1, y: 0 }} // Fade in & move up
-            transition={{ duration: 0.6, ease: "easeOut" }} // Smooth transition
-          >
-            <MetadataOverviewTable />
-            <PartitionMetadataViewer />
-            <SnapshotEvolutionTimeline/>
-          </motion.div>
-        )}
+      <div className="w-64 fixed left-0 top-0 bottom-0 z-50">
+        <AppSidebar />
       </div>
+
+      {/* idk why the sphere still shows up*/}
+      <Canvas 
+        className="absolute inset-0 z-0 w-full h-full"
+        style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
+      >
+        <ambientLight intensity={0.4} />
+        <pointLight position={[3, 5, 4]} intensity={1.5} />
+        <pointLight position={[-3, -5, 4]} intensity={0.8} color="#d8b4fe" />
+        <Stars radius={400} depth={90} count={5000} factor={6} fade />
+        <BackgroundScene withSphere={false}/>
+      </Canvas>
+
+      <div className="flex flex-row relative z-20 items-center justify-center">
+        <div className="w-full max-w-4xl p-8">
+          <DataInputField onFetch={handleFetch} />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
