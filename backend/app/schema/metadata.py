@@ -54,7 +54,7 @@ class RowGroup(BaseModel):
     null_counts: Optional[Dict[str, int]] = None
 
 # Attribute-6 File Meta Data
-# if needs to be implemented for iceberg in future, parquet wll have to be passed
+# if needs to be implemented for iceberg in future, parquet wll have to be parsed
 class FileMetaData(BaseModel):
     file_path: str
     format: str
@@ -83,7 +83,7 @@ class TableProperties(BaseModel):
 class UnifiedMetaData(BaseModel):
     link: str
     info: DataInfo
-    schema: TableSchema
+    table_schema: TableSchema
     partitioning: Optional[Partitioning] = None
     snapshot_timeline: Optional[List[SnapshotMeta]] = []
     files: Optional[List[FileMetaData]] = []

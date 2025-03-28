@@ -1,7 +1,7 @@
 import boto3
 import json
 from app.services.standardizer import metadata_standardizer
-def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str):
+def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str, folder_name: str):
     s3_client = boto3.client('s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
     # This would list all the objects inside the iceberg i.e all the files which are present by scanning it recursively.
     # In the next step, I just extract all the files(objects) which end with .metadata.json as that is supposed to be unique

@@ -18,11 +18,12 @@ class MetadataRequestAWS(BaseModel):
     iam_secret_access_key: str
     region_name: str
     bucket_name: str
+    folder_name: str
 
 router = APIRouter(prefix="/api")
 
-@router.post("/aws/metadata",dependencies=[Depends(isAuthenticated)])
-async def fetch_metadata_aws(request: MetadataRequestAWS,payload:dict=Depends(isAuthenticated)):
+@router.post("/aws/metadata")
+async def fetch_metadata_aws(request: MetadataRequestAWS, payload:dict):
     res = await get_metadata(request)
     return res
 
