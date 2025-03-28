@@ -1,92 +1,19 @@
-import React, { Suspense, useRef, useState, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { 
-  OrbitControls, 
-  Sphere, 
-  MeshDistortMaterial, 
+import React, { useState} from "react";
+import { Canvas } from "@react-three/fiber";
+import {
   Stars, 
-  Points, 
-  PointMaterial,
 } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
-import * as THREE from "three";
 import axios from "axios";
 import useAuthContext from "../hooks/useAuthContext";
+import GithubLinkProject from "../components/common/Github";
+import Logo from "../components/logo/Logo";
+import BackgroundScene from "../components/layout/BackgroundScene";
 
-const FloatingParticles = React.memo(() => {
-    const particlesRef = useRef<THREE.Points>(null);
-    const particlePositions = useMemo(() => 
-        new Float32Array(3000).fill(0).map(() => (Math.random() - 0.5) * 50),
-        []
-    );
-
-    useFrame(({ clock }) => {
-        if(particlesRef.current) {
-            particlesRef.current.rotation.y = clock.getElapsedTime() * 0.02;
-        }
-    });
-    return (
-        <Points ref={particlesRef} positions={particlePositions}>
-            <PointMaterial color="#d8b4fe" size={0.08} sizeAttenuation transparent opacity={0.7} />
-        </Points>
-    );
-});
-
-const RotatingGlobe = React.memo(() => {
-    const globeRef = useRef<THREE.Mesh>(null);
-
-    useFrame(() => {
-        if(globeRef.current) {
-            globeRef.current.rotation.y += 0.001;
-        }
-    });
-
-    return (
-        <mesh ref={globeRef} position={[0, 0, -12]} scale={1.3}>
-            <sphereGeometry args={[3, 64, 64]} />
-            <meshStandardMaterial
-                color="#b04fe8"
-                wireframe
-                opacity={1}
-                transparent={true}
-                emissive="6a0dad"
-                emissiveIntensity={0.2}
-            />
-        </mesh>
-    );
-});
-
-// Memoized Background Scene
-const BackgroundScene = React.memo(() => {
-    return (
-        <Suspense fallback={null}>
-            <RotatingGlobe />
-            <OrbitControls 
-                enableZoom={false} 
-                autoRotate 
-                autoRotateSpeed={0.8} 
-                enablePan={false}
-                minPolarAngle={Math.PI / 2.5}
-                maxPolarAngle={Math.PI / 1.5}
-            />
-            <Sphere args={[2, 64, 64]} scale={3.5}>
-                <MeshDistortMaterial 
-                    color="#6a0dad" 
-                    emissive="#8b5cf6" 
-                    emissiveIntensity={0.5} 
-                    distort={0.5} 
-                    speed={1} 
-                />
-            </Sphere>
-            <FloatingParticles />
-        </Suspense>
-    );
-});
 
 const AuthPage: React.FC = () => {
-
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const {dispatch} = useAuthContext();
@@ -95,9 +22,9 @@ const AuthPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [titleComplete, setTitleComplete] = useState(false);
 
   const navigate = useNavigate();
-
 
   const validateForm = () => {
     if (!email || !password) {
@@ -113,7 +40,6 @@ const AuthPage: React.FC = () => {
     return true;
   };
 
-  // Login Handler
   const loginUser = async (email: string, password: string) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
@@ -121,7 +47,7 @@ const AuthPage: React.FC = () => {
         password,
       });
       const { token, user } = response.data;
-      localStorage.setItem("token", token); // Store token for future requests
+      localStorage.setItem("token", token);
       dispatch({type:"LOGIN",payload:response.data});
       return { success: true, message: "Login successful", user };
     } catch (error) {
@@ -129,7 +55,6 @@ const AuthPage: React.FC = () => {
     }
   };
 
-  // Signup Handler
   const signupUser = async (email: string, password: string, username: string) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/signup`, {
@@ -142,7 +67,7 @@ const AuthPage: React.FC = () => {
       dispatch({type:"LOGIN",payload:response.data});
       return { success: true, message: "Signup successful", user };
     } catch (error) {
-      return { success: false, message: "Signup failed" };
+      return { success: false, message: "Signup failed", error: error};
     }
   };
 
@@ -173,7 +98,7 @@ const AuthPage: React.FC = () => {
         }
       }
     } catch (err) {
-      setError('Error Occured');
+      setError('Error Occurred');
     } finally {
       setIsLoading(false);
     }
@@ -194,6 +119,11 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="relative h-screen w-screen bg-[#090012] flex items-center justify-center overflow-hidden">
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 scale-75">
+        <Logo />
+      </div>
+      <GithubLinkProject />
+
       <Canvas 
         className="absolute inset-0 z-0 w-full h-full"
         style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
@@ -213,13 +143,19 @@ const AuthPage: React.FC = () => {
         whileHover={{ scale: 1.02 }}
       >
         <div className="flex items-center justify-center mb-8">
-          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
-            <Typewriter 
-              words={[isLogin ? 'Welcome Back' : 'Create Account']}
-              cursor
-              cursorStyle="_"
-              typeSpeed={70}
-            />
+          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 h-12">
+            {!titleComplete ? (
+              <Typewriter 
+                words={[isLogin ? 'Welcome Back' : 'Create Account']}
+                cursor
+                cursorStyle=""
+                typeSpeed={50}
+                onType={() => {}}
+                onComplete={() => setTitleComplete(true)}
+              />
+            ) : (
+              isLogin ? 'Welcome Back' : 'Create Account'
+            )}
           </h1>
         </div>
 
@@ -229,12 +165,11 @@ const AuthPage: React.FC = () => {
           </div>
         )}
 
-        {/* Auth form and stuff starts here*/}
         <form onSubmit={handleAuthentication} className="space-y-6">
           {!isLogin && (
             <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
               <label className="block text-sm font-medium text-purple-200">Username</label>
@@ -242,7 +177,7 @@ const AuthPage: React.FC = () => {
                 type="text" 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 w-full px-3 py-2 bg-[#2a1642] border border-purple-800/50 rounded-md text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="mt-1 w-full px-3 py-2 bg-[#2a1642] border border-purple-800/50 rounded-md text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300"
                 placeholder="Choose a username"
                 required
               />
@@ -255,7 +190,7 @@ const AuthPage: React.FC = () => {
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full px-3 py-2 bg-[#2a1642] border border-purple-800/50 rounded-md text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="mt-1 w-full px-3 py-2 bg-[#2a1642] border border-purple-800/50 rounded-md text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300"
               placeholder="Enter your email"
               required
             />
@@ -268,15 +203,16 @@ const AuthPage: React.FC = () => {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full px-3 py-2 pr-10 bg-[#2a1642] border border-purple-800/50 rounded-md text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="mt-1 w-full px-3 py-2 pr-10 bg-[#2a1642] border border-purple-800/50 rounded-md text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300"
                 placeholder="Enter your password"
                 required
               />
               <button 
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-300 hover:text-white"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-300 hover:text-white transition-colors"
               >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
               </button>
             </div>
           </div>
@@ -284,7 +220,7 @@ const AuthPage: React.FC = () => {
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-md hover:from-purple-700 hover:to-pink-700 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
+            className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-md hover:from-purple-700 hover:to-pink-700 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Processing...' : (isLogin ? 'Log In' : 'Sign Up')}
           </button>
@@ -300,6 +236,7 @@ const AuthPage: React.FC = () => {
                 setEmail('');
                 setPassword('');
                 setUsername('');
+                setTitleComplete(false);
               }}
               className="text-pink-500 hover:text-pink-400 font-semibold transition-colors"
             >
