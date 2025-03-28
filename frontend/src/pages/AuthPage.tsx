@@ -132,7 +132,7 @@ const AuthPage: React.FC = () => {
         <pointLight position={[3, 5, 4]} intensity={1.5} />
         <pointLight position={[-3, -5, 4]} intensity={0.8} color="#d8b4fe" />
         <Stars radius={400} depth={90} count={5000} factor={6} fade />
-        <BackgroundScene />
+        <BackgroundScene withSphere={true}/>
       </Canvas>
 
       <motion.div 

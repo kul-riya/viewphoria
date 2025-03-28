@@ -12,8 +12,8 @@ const DataInputField: React.FC<{ onFetch: () => void }> = ({ onFetch }) => {
     <div className="w-screen overflow-hidden">
       <main className="z-10 flex flex-col items-center justify-center mt-50">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-medium text-white mb-6">
-            Enter URI to start analyzing data files
+          <h1 className="text-3xl font-medium text-white mb-6">
+            ENTER URI TO START ANALYZING DATASETS
           </h1>
 
           <div className="mb-2">

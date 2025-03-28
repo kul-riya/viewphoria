@@ -44,7 +44,7 @@ const AppSidebar: React.FC = () => {
             <div className="flex items-center">
               <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mr-3"></div>
               <div>
-                {/* Fetch the name here from DB*/}
+                {/*DB Fetching*/}
                 <p className="text-sm font-semibold text-white">Aman Morghade</p>
                 <p className="text-xs text-purple-300">Native User</p>
               </div>
