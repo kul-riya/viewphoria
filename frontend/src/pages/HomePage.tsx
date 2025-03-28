@@ -4,6 +4,9 @@ import { Stars } from "@react-three/drei";
 import AppSidebar from "../components/layout/AppSidebar";
 import BackgroundScene from "../components/layout/BackgroundScene";
 import DataInputField from "../components/layout/DataInputField";
+import Navbar from "../components/common/Navbar";
+import SnapshotEvolutionTimeline from "../components/layout/SnapshotEvolutionTimeline";
+
 
 const HomePage: React.FC = () => {
   const [fetch, setFetch] = useState(false);
