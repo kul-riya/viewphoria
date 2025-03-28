@@ -17,8 +17,6 @@ class SchemaField(BaseModel):
     required: Optional[bool] = False
     min_value: Optional[Union[int, float, str, datetime.date]] = None
     max_value: Optional[Union[int, float, str, datetime.date]] = None
-    min_value: Optional[Union[int, float, str, datetime.date]] = None
-    max_value: Optional[Union[int, float, str, datetime.date]] = None
 
 
 class TableSchema(BaseModel):
