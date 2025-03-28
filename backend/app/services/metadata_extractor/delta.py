@@ -3,7 +3,7 @@ import json
 from typing import List, Optional
 from app.services.standardizer import metadata_standardizer
 
-def get_delta_metadata(access_key: str, secret_key: str, region_name: str, bucket_name: str, folder_name: str) -> Optional[List[dict]]:
+def get_metadata_delta(access_key: str, secret_key: str, region_name: str, bucket_name: str, folder_name: str) -> Optional[List[dict]]:
     if not (access_key and secret_key and region_name and bucket_name):
         print("Invalid Credentials")
         return None
@@ -39,13 +39,9 @@ def get_delta_metadata(access_key: str, secret_key: str, region_name: str, bucke
 
         if not all_entries:
             return None
-        return all_entries
+        unified_metadata = metadata_standardizer(file_format="delta", metadata=all_entries, bucket=bucket_name, folder_name=folder_name)
+        return unified_metadata
 
     except Exception as e:
         print(f"Error accessing S3: {e}")
         return None
-
-metadata = get_delta_metadata(access_key="AKIA6IY36GTNWUWIDX4B", secret_key="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", region_name="ap-south-1", bucket_name="csi-delta", folder_name="delta_table")
-
-unified_metadata = metadata_standardizer(file_format="delta", metadata=metadata, bucket="csi-delta", folder_name="delta_table")
-print(unified_metadata)

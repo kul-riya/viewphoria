@@ -1,7 +1,7 @@
 import boto3
 import json
 
-def extract_hudi_commit_metadata(bucket, key, access_key, secret_key):
+def extract_hudi_commit_metadata(bucket, key, access_key, secret_key, folder_name):
     # Initialize S3 client with the provided credentials
     s3_client = boto3.client(
         's3',

@@ -129,7 +129,7 @@ def metada_data_standardizer_iceberg(metadata,location,s3_client):
 
 
 def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str,folder_name):
-    
+
     # This would list all the objects inside the iceberg i.e all the files which are present by scanning it recursively.
     # In the next step, I just extract all the files(objects) which end with .metadata.json as that is supposed to be unique
     #Then the metadata is parsed accordingly
