@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
 import * as THREE from "three";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import GithubLinkProject from "../components/common/Github";
+
 
 // Floating particles in the sky
 const FloatingParticles = () => {
@@ -64,12 +66,16 @@ const OnBoarding: React.FC = () => {
     // This is just to simulate loading and render the backend components properly for all devices and configurations!!
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 1000);
     
     return () => clearTimeout(timer);
   }, []);
 
   return (
+    <>
+    <GithubLinkProject />
+    <div className="absolute w-screen flex flex-row items-center">
+    </div>
     <div className="relative h-screen w-screen bg-[#090012] flex flex-col items-center justify-center overflow-hidden">
       <AnimatePresence>
         {isLoading ? (
@@ -151,7 +157,7 @@ const OnBoarding: React.FC = () => {
             words={[" Viewphoria", " The Future"]} 
             loop 
             cursor 
-            cursorStyle="_" 
+            cursorStyle="" 
             typeSpeed={60} 
             deleteSpeed={50} 
             delaySpeed={4000} 
@@ -185,6 +191,18 @@ const OnBoarding: React.FC = () => {
               <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </motion.button>
+
+          <motion.button
+            className="px-5 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:cursor-pointer hover:to-purple-900 text-white text-base sm:text-lg font-semibold tracking-wide rounded-full shadow-xl transition-all duration-300 flex items-center justify-center"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(147, 51, 234, 0.5)"}}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => navigate("/auth")}
+          >
+            <span>Create Account</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </motion.button>
         </motion.div>
         
         {/* Live users indicator */}
@@ -201,6 +219,7 @@ const OnBoarding: React.FC = () => {
       
       <DeveloperLinks isLoading={isLoading} />
     </div>
+    </>
   );
 };
 
