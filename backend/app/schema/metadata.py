@@ -83,7 +83,7 @@ class FileMetaData(BaseModel):
     row_count: Optional[int] = None
     row_groups: Optional[List[RowGroup]] = [] # only for hudi and parquet data type
     partition: Partitioning = None # only for iceberg
-    snapshot: Optional[List[SnapshotFile]] # only for hudi
+    snapshot: Optional[List[SnapshotFile]] = [] # only for hudi
 
 
 # Attribute-8 Table Properties
@@ -97,8 +97,8 @@ class TableProperties(BaseModel):
 
 class UnifiedMetaData(BaseModel):
     link: str
-    info: DataInfo
-    schema: TableSchema
+    info: Optional[DataInfo] = None
+    schema: Optional[TableSchema] = None
     partitioning: Optional[Partitioning] = None
     snapshot_timeline: Optional[List[SnapshotMeta]] = []
     files: Optional[List[FileMetaData]] = []

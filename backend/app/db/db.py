@@ -14,6 +14,7 @@ load_dotenv()
 db_url = os.getenv('MONGO_URL')
 
 async def init_db():
+    print(db_url)
     client = AsyncIOMotorClient(db_url)  
     db = client.my_database
     await init_beanie(database=db,document_models=[User, MetaData])

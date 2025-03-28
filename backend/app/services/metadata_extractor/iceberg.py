@@ -8,11 +8,13 @@ sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from schema.metadata import *
 
 def parse_avro_link(link:str):
+    
     link = link.split("/")
     file_name = link[len(link)-1]
     return file_name
 
 def read_avro(s3_client,bucket_name,avro_file):
+
     response = s3_client.list_objects_v2(Bucket=bucket_name)
     records = []
     if 'Contents' in response:
@@ -25,40 +27,7 @@ def read_avro(s3_client,bucket_name,avro_file):
         return records
 
 
-def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str,folder_name):
-    s3_client = boto3.client('s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
-    # This would list all the objects inside the iceberg i.e all the files which are present by scanning it recursively.
-    # In the next step, I just extract all the files(objects) which end with .metadata.json as that is supposed to be unique
-    #Then the metadata is parsed accordingly
-    response = s3_client.list_objects_v2(Bucket=bucket_name)
-    r1 = list()
-    list_of_metadata_files = list()
-    val = ""
-    if 'Contents' in response:
-        for obj in response['Contents']:
-            if (obj['Key'].endswith('metadata.json') and obj['Key'].startswith(folder_name)):
-                val = obj['Key']
-                list_of_metadata_files.append(val)
-        list_of_metadata_files.sort(reverse=True)
-        if(len(list_of_metadata_files)==0):
-            return r1
-        required_metadata = list_of_metadata_files[0]
-        print(required_metadata)
-        try:
-            response = s3_client.get_object(Bucket=bucket_name, Key=required_metadata)
-            metadata_content = response['Body'].read().decode('utf-8')
-            metadata_json = json.loads(metadata_content)
-            r1.append(metadata_json)
-        except Exception as e:
-            print(str(e))
-            return None
-    return r1
-
-
-val = get_metadata_iceberg(region_name="ap-south-1",aws_access_key_id="AKIAWCZC5Y5YUL6UBP34",aws_secret_access_key="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",bucket_name="segfaultsurvivor",folder_name="demo")
-print(val)
-
-def metada_data_standardizer_iceberg(metadata,location):
+def metada_data_standardizer_iceberg(metadata,location,s3_client):
     unified_metadata = []
     for idx,metadata_json in enumerate(metadata):
         table_location = metadata_json.get("location", "")
@@ -99,8 +68,6 @@ def metada_data_standardizer_iceberg(metadata,location):
                 ))
             manifest_list_latest = snapshot.get("manifest-list", "")
             timestamp_latest = snapshot.get("timestamp-ms", "")
-
-        s3_client = boto3.client('s3',region_name='ap-south-1',aws_access_key_id="AKIAWCZC5Y5YUL6UBP34",aws_secret_access_key="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")
         
         files_metadata = []
         first_avro_filedata = read_avro(s3_client,bucket_name="segfaultsurvivor",avro_file=parse_avro_link(manifest_list_latest))
@@ -158,16 +125,36 @@ def metada_data_standardizer_iceberg(metadata,location):
             files=files_metadata
         ))
     return unified_metadata
-        
-        
-
-        
 
 
+def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str,folder_name):
+    
+    # This would list all the objects inside the iceberg i.e all the files which are present by scanning it recursively.
+    # In the next step, I just extract all the files(objects) which end with .metadata.json as that is supposed to be unique
+    #Then the metadata is parsed accordingly
 
-
-
-val = metada_data_standardizer_iceberg(val,"s3://segfaultsurvivor/demo/nyc/taxis/metadata/v3.metadata.json")
-
-
-
+    s3_client = boto3.client('s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
+    response = s3_client.list_objects_v2(Bucket=bucket_name)
+    r1 = list()
+    list_of_metadata_files = list()
+    val = ""
+    required_metadata=""
+    if 'Contents' in response:
+        for obj in response['Contents']:
+            if (obj['Key'].endswith('metadata.json') and obj['Key'].startswith(folder_name)):
+                val = obj['Key']
+                list_of_metadata_files.append(val)
+        list_of_metadata_files.sort(reverse=True)
+        if(len(list_of_metadata_files)==0):
+            return r1
+        required_metadata = list_of_metadata_files[0]
+        try:
+            response = s3_client.get_object(Bucket=bucket_name, Key=required_metadata)
+            metadata_content = response['Body'].read().decode('utf-8')
+            metadata_json = json.loads(metadata_content)
+            r1.append(metadata_json)
+        except Exception as e:
+            print(str(e))
+            return None
+        r1 = metada_data_standardizer_iceberg(r1,required_metadata,s3_client)
+    return r1
