@@ -13,11 +13,15 @@ const menuItems = [
 
 const AppSidebar: React.FC = () => {
   return (
-    <div className="bg-[#1a0e2c] border-r border-purple-900/30 h-screen w-64 flex flex-col">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="bg-[#1a0e2c] border-r border-purple-900/30 h-screen w-64 flex flex-col shadow-2xl"
+    >
       <div className="p-4 border-b border-purple-900/30 flex justify-center scale-50">
         <Logo />
       </div>
-
       <div className="flex-1 py-6 space-y-2">
         {menuItems.map((item, index) => (
           <motion.div
@@ -37,25 +41,31 @@ const AppSidebar: React.FC = () => {
           </motion.div>
         ))}
       </div>
-
       <div className="p-4 border-t border-purple-900/30">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 100 }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ type: "spring", stiffness: 100 }}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mr-3"></div>
               <div>
-                {/*DB Fetching*/}
                 <p className="text-sm font-semibold text-white">Aman Morghade</p>
                 <p className="text-xs text-purple-300">Native User</p>
               </div>
             </div>
-            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-purple-300 hover:text-white">
+            <motion.button 
+              whileHover={{ scale: 1.1 }} 
+              whileTap={{ scale: 0.9 }} 
+              className="text-purple-300 hover:text-white"
+            >
               <Settings size={20} />
             </motion.button>
           </div>
         </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
