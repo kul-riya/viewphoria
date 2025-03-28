@@ -4,6 +4,7 @@ import sys
 import fastavro
 from pathlib import Path
 from io import BytesIO
+from fastapi import HTTPException
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from schema.metadata import *
 
@@ -123,7 +124,7 @@ def metada_data_standardizer_iceberg(metadata,location,s3_client):
             partitioning=partioning_overall,
             snapshot_timeline=snapshot_meta,
             files=files_metadata
-        ))
+        ).model_dump())
     return unified_metadata
 
 
@@ -132,6 +133,8 @@ def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access
     # This would list all the objects inside the iceberg i.e all the files which are present by scanning it recursively.
     # In the next step, I just extract all the files(objects) which end with .metadata.json as that is supposed to be unique
     #Then the metadata is parsed accordingly
+    if(folder_name==""):
+        raise HTTPException(status_code=402, detail="Folder name cannot be empty")
 
     s3_client = boto3.client('s3',region_name=region_name,aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
     response = s3_client.list_objects_v2(Bucket=bucket_name)
