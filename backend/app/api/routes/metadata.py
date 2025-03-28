@@ -18,6 +18,7 @@ class MetadataRequestAWS(BaseModel):
     iam_secret_access_key: str
     region_name: str
     bucket_name: str
+    folder_name:str
 
 router = APIRouter(prefix="/api")
 
