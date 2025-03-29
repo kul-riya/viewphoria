@@ -42,6 +42,7 @@ async def add_metadata_to_db(request: MetadataRequestAWS,payload:dict=Depends(is
         object_id_aws = str(uuid.uuid4())
         new_data = MetaData(file_type=file_type,aws_object_id=object_id_aws,meta_data=res,bucket_name=Bucket_name)
         final_res = await create_metadata(new_data)
+        
         foundUser.metadata.append(final_res)
         await foundUser.save()
         return {"status": 200, "message": "Metadata added successfully to database", "data": json.loads(final_res.meta_data)}
@@ -56,12 +57,27 @@ async def get_metadata_from_db(payload:dict=Depends(isAuthenticated)):
         userid = payload['id']
         foundUser = await User.get(ObjectId(userid),fetch_links=True)
         metadata_list = []
-        val = json.loads(foundUser.metadata[0].meta_data)
-        # for metadata in foundUser.metadata:
-        #     metadata_dict = json.loads(metadata.meta_data)
-        #     metadata_dict["_id"] = str(metadata.id)
-        #     metadata_list.append(metadata_dict)
-        return {"status": 200, "message": "Metadata fetched successfully from database", "data": metadata_list}
+        # val = foundUser.metadata[0].meta_data['metadata']
+
+        for metadata in foundUser.metadata:
+            metadata_dict = json.loads(metadata.meta_data)
+            metadata_dict["_id"] = str(metadata.id)
+            metadata_list.append(metadata_dict)
+        print(metadata_list[0].get("metadata")[0].get("snapshot_timeline"))
+        return None
+        # return {"status": 200, "message": "Metadata fetched successfully from database", "data": metadata_list}
     except Exception as e:
         print(str(e))
         return HTTPException(status_code=400, detail="Error in fetching metadata from db")
+
+
+@router.get("/metadata/snapshot/{id}")
+async def get_snapshot(id:str):
+    try:
+        foundMetaData = await MetaData.get(ObjectId(id))
+        response = json.loads(foundMetaData.meta_data).get("metadata")[0].get("snapshot_timeline")
+        return {"status": 200, "message": "Snapshot fetched successfully from database", "data": response}
+    except Exception as e:
+        print(str(e))
+        return HTTPException(status_code=400, detail="Error in fetching snapshot from db")
+

@@ -140,6 +140,7 @@ def metadata_standardizer_iceberg(metadata,location,s3_client):
         files=files_metadata).model_dump()
 
 
+
 def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access_key:str,bucket_name:str,folder_name):
 
     # This would list all the objects inside the iceberg i.e all the files which are present by scanning it recursively.
