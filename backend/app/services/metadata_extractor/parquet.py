@@ -44,7 +44,6 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
             meta.append(metadata)
             # Add filename to metadata
             # metadata["file_name"] = parquet_key
-            meta.append(metadata)
 
         except Exception as e:
             print(f"Error reading metadata for {parquet_key}: {e}")
