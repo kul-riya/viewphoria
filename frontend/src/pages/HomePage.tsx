@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react";
 import AppSidebar from "../components/layout/AppSidebar";
 import BackgroundScene from "../components/layout/BackgroundScene";
 import DataInputField from "../components/layout/DataInputField";
-import Navbar from "../components/common/Navbar";
 import SnapshotEvolutionTimeline from "../components/layout/SnapshotEvolutionTimeline";
 
 import Loader from "../components/common/Loader";
@@ -17,8 +16,7 @@ const HomePage: React.FC = () => {
 
   const handleFetch = () => {
     setIsLoading(true);
-    // Your fetch logic here
-    // For example:
+    // Something
     // axios.post(...).then(() => {
     //   setIsLoading(false);
     // }).catch(() => {
