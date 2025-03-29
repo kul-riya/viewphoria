@@ -30,7 +30,6 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="relative h-screen w-screen bg-[#090012] flex overflow-hidden">
-      {/* Sidebar Toggle Button */}
       <motion.button 
         onClick={toggleSidebar}
         className="fixed top-4 left-4 z-[60] bg-purple-600/30 hover:bg-purple-600/50 p-2 rounded-full backdrop-blur-sm"
@@ -40,7 +39,6 @@ const HomePage: React.FC = () => {
         {isSidebarOpen ? <X className="text-white" /> : <Menu className="text-white" />}
       </motion.button>
 
-      {/* Sidebar */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
@@ -55,7 +53,6 @@ const HomePage: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Background Canvas */}
       <Canvas
         className="absolute inset-0 z-0 w-full h-full"
         style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
@@ -67,7 +64,6 @@ const HomePage: React.FC = () => {
         <BackgroundScene withSphere={false}/>
       </Canvas>
 
-      {/* Content Area */}
       <motion.div 
         className="absolute inset-0 flex items-center justify-center z-20"
         animate={{ 
