@@ -117,7 +117,7 @@ def metada_data_standardizer_iceberg(metadata,location,s3_client):
         
         partioning_overall = Partitioning(type="list",columns=partition_columns_overall)
         
-        unified_metadata.append(UnifiedMetaData(
+        unified_metadata = (UnifiedMetaData(
             link=location,
             info=table_info,
             schema=table_schema,
