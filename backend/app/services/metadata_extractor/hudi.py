@@ -3,11 +3,13 @@ import json
 import pyarrow.parquet as pq
 import pyarrow.fs as fs
 
-from viewphoria.backend.app.services import standardizer
+# from viewphoria.backend.app.services import standardizer
+from schema.metadata import *
+
 
 data_files = {}
 
-def extract_hudi_commit_metadata(aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str, prefix:str):
+def extract_hudi_commit_metadata(unified_metadata: UnifiedMetaData, aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str, prefix:str):
     # Initialize S3 client with the provided credentials
     s3_client = boto3.client(
         's3',
@@ -60,7 +62,7 @@ def extract_hudi_commit_metadata(aws_access_key_id: str, aws_secret_access_key: 
 def get_metadata_avro():
     pass
 
-def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str, prefix:str):
+def get_metadata_parquet(unified_metadata: UnifiedMetaData, aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str, prefix:str):
     if not (aws_access_key_id and aws_secret_access_key and region_name and bucket_name):
         raise ValueError("Missing required AWS credentials or bucket name!")
 
@@ -85,70 +87,103 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
     # Initialize S3 Filesystem for efficient metadata extraction
     s3_fs = fs.S3FileSystem(region=region_name, aws_access_key_idaccess_key=aws_access_key_id, secret_key=aws_secret_access_key)
 
-    meta = []
+    files_meta_data = []
+
     
     for parquet_key in parquet_files:
         try:
             # Use Arrow's S3FileSystem to read metadata without loading entire file
             pq_file = pq.ParquetFile(f"{bucket_name}/{parquet_key}", filesystem=s3_fs)
-            metadata = pq_file.metadata.to_dict() if pq_file.metadata else {}
-            metadata["location"] = parquet_key
-            meta.append(metadata)
+            file_meta = pq_file.metadata.to_dict() if pq_file.metadata else {}
+            file_meta["location"] = parquet_key
+
+            schema_fields = []
+            if "row_groups" in file_meta and len(file_meta["row_groups"]) > 0:
+                columns = file_meta["row_groups"][0]["columns"]
+                for col in columns:
+                    stats = col.get("statistics", {})
+                    schema_fields.append(SchemaField(
+                        name=col.get("path_in_schema", "Unknown"),
+                        type=col.get("physical_type", "Unknown"),
+                        min_value=stats.get("min"),
+                        max_value=stats.get("max"),
+                        compression=col.get("compression", "Unknown")
+                    ))
+
+            table_schema = TableSchema(fields=schema_fields)
+
+            row_groups = [
+                RowGroup(
+                    row_count=rg["num_rows"],
+                    size_bytes=rg["total_byte_size"]
+                ) for rg in file_meta["row_groups"]
+            ]
+            file_path = parquet_key
+            files_meta_data.append(FileMetaData(
+                    file_path=file_path,
+                    format="parquet",
+                    schema=table_schema,
+                    size_bytes=file_meta.get("serialized_size", 0),
+                    row_count=file_meta.get("num_rows", 0),
+                    row_groups=row_groups
+                ))
 
 
         except Exception as e:
             print(f"Error reading metadata for {parquet_key}: {e}")
 
-    return meta
 
 
 
 
 
-def get_base_info(aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str, prefix:str):
+def get_base_info(unified_metadata: UnifiedMetaData, bucket, key, access_key, secret_key):
 
     s3_client = boto3.client(
         's3',
-        aws_access_key_id=aws_access_key_id,
-        aws_secret_access_key=aws_secret_access_key
+        aws_access_key_id=access_key,
+        aws_secret_access_key=secret_key
     )
-    response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+    response = s3_client.list_objects_v2(Bucket=bucket, Prefix=key)
     for obj in response.get("Contents", []):
         if obj["Key"].endswith("hoodie.properties"):
             path = obj["Key"]
-            response = s3_client.get_object(Bucket=bucket_name, Key=path)
+            response = s3_client.get_object(Bucket=bucket, Key=path)
             file_content = response['Body'].read().decode('utf-8')
-                
+            # Remove lines starting with #
+            filtered_content = "\n".join(line for line in file_content.splitlines() if not line.strip().startswith("#"))
+
                 # Try to parse as JSON if possible (most Hudi commit files are JSON)
             try:
-                props = json.loads(file_content)
+                props = {}
+                for line in file_content.splitlines():
+                    line = line.strip()
+                    if line and not line.startswith("#"):  # Ignore empty lines and comments
+                        key, value = line.split("=", 1)  # Split only on the first '='
+                        props[key] = value
 
+                unified_metadata.DataInfo = DataInfo(name=props.get("hoodie.table.format", None), location=f"s3://{bucket}/{key}", format="hudi", version=props.get("hoodie.table.version", None),)
+
+                return props.get("hoodie.table.base.file.format", None)
             except Exception as e:
-                print(file_content)
+                print(filtered_content)
                 print(f"Error reading hoodie.properties for {path}: {e}")
 
-    return props
-
-
-
-
+    
 
 
 def read_hudi(aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str, prefix:str):
-    # metadata = {}
-    # commit_contents = extract_hudi_commit_metadata("peri-peri-fries", "hudi_trips_cow/", "AKIASFIXC4X7UGDOHPX2","MSJM08lZuF07h9Cpb4TtqA++nbKyn//AbzkJwz1K")
-    # print(commit_contents)
+    unified_metadata = UnifiedMetaData()
 
-    # get_metadata_parquet("AKIASFIXC4X7UGDOHPX2","MSJM08lZuF07h9Cpb4TtqA++nbKyn//AbzkJwz1K", "eu-north-1", "peri-peri-fries", "hudi_trips_cow/")
-    data_files["properties"] = get_base_info("AKIASFIXC4X7UGDOHPX2","MSJM08lZuF07h9Cpb4TtqA++nbKyn//AbzkJwz1K", "eu-north-1", "peri-peri-fries", "hudi_trips_cow/")
-    data_files["commit_data"] = extract_hudi_commit_metadata("AKIASFIXC4X7UGDOHPX2","MSJM08lZuF07h9Cpb4TtqA++nbKyn//AbzkJwz1K", "eu-north-1", "peri-peri-fries", "hudi_trips_cow/")
-    if data_files.properties["hoodie.table.base.file.format"] == "PARQUET":
-
-        data_files["file_metadata"] = get_metadata_parquet(aws_access_key_id,aws_secret_access_key, region_name, bucket_name, bucket_name)
+    file_format = get_base_info(unified_metadata, aws_access_key_id,aws_secret_access_key, region_name, bucket_name, bucket_name)
+    extract_hudi_commit_metadata(unified_metadata, aws_access_key_id,aws_secret_access_key, region_name, bucket_name, bucket_name)
+    if file_format == "PARQUET":
+        data_files["file_metadata"] = get_metadata_parquet(unified_metadata, aws_access_key_id,aws_secret_access_key, region_name, bucket_name, bucket_name)
     else:
         data_files["file_metadata"] = get_metadata_avro()
 
-    return standardizer()
+    # return standardize_hudi(aws_access_key_id,aws_secret_access_key, region_name, bucket_name, bucket_name)
 
 if __name__ == "__main__":
     read_hudi("AKIASFIXC4X7UGDOHPX2","MSJM08lZuF07h9Cpb4TtqA++nbKyn//AbzkJwz1K", "eu-north-1", "peri-peri-fries", "hudi_trips_cow/")
+

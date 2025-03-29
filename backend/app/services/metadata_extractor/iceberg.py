@@ -28,7 +28,7 @@ def read_avro(s3_client,bucket_name,avro_file):
         return records
 
 
-def metada_data_standardizer_iceberg(metadata,location,s3_client):
+def metadata_standardizer_iceberg(metadata,location,s3_client):
     for idx,metadata_json in enumerate(metadata):
         table_location = metadata_json.get("location", "")
         table_info = DataInfo(
@@ -76,26 +76,41 @@ def metada_data_standardizer_iceberg(metadata,location,s3_client):
         second_avro_filedata = read_avro(s3_client,bucket_name="segfaultsurvivor",avro_file=parse_avro_link(second_avro_file))
         
         snapshot_file = []
-        partition_columns_overall = []
+        partition_columns_overall = {} # value of PartitionColumn is the key for partition_columns_overall dict
         for individual_file_data in second_avro_filedata:
 
             file_path = individual_file_data.get("data_file","Unknown").get("file_path","Unknown")
             file_format = individual_file_data.get("data_file", "Unknown").get("file_format", "Unknown")
             file_size = individual_file_data.get("data_file", "Unknown").get("file_size_in_bytes", 0)
+
             partition_columns = []
+
             if(type(individual_file_data.get("data_file", "Unknown").get("partition", "Unknown")) == dict):
                 partition_columns.append(PartitionColumn(
                     field_id=individual_file_data.get("field_id", None),
                     name=str([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").keys()]),
                     value=([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").values()]),
                     type=str(individual_file_data.get("data_file", "Unknown").get("file_format", "Unknown")),
+                    file_paths=[file_path]
                 ))
-                partition_columns_overall.append(PartitionColumn(
+                # partition_columns_overall.append(PartitionColumn(
+                #     field_id=individual_file_data.get("field_id", None),
+                #     name=str([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").keys()]),
+                #     value=([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").values()]),
+                #     type=str(individual_file_data.get("data_file", "Unknown").get("file_format", "Unknown")),
+                # ))
+
+                if partition_columns_overall.get(next(iter([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").values()]), None), None):
+                    partition_columns_overall[next(iter([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").values()]), None)].file_paths.append(file_path)
+
+                else:
+                    partition_columns_overall[next(iter([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").values()]), None)] = PartitionColumn(
                     field_id=individual_file_data.get("field_id", None),
                     name=str([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").keys()]),
                     value=([alp for alp in individual_file_data.get("data_file", "Unknown").get("partition", "Unknown").values()]),
                     type=str(individual_file_data.get("data_file", "Unknown").get("file_format", "Unknown")),
-                ))
+                    file_paths=[file_path]
+                )
             
             snapshot_file.append(SnapshotFile(
                 snapshot_id=str(individual_file_data.get("snapshot_id", "Unknown")),
@@ -156,5 +171,5 @@ def get_metadata_iceberg(region_name:str,aws_access_key_id:str,aws_secret_access
         except Exception as e:
             print(str(e))
             return None
-        r1 = metada_data_standardizer_iceberg(r1,required_metadata,s3_client)
+        r1 = metadata_standardizer_iceberg(r1,required_metadata,s3_client)
     return r1

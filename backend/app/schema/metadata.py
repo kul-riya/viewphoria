@@ -45,6 +45,7 @@ class PartitionColumn(BaseModel):
     field_id: Optional[Union[int, str]] = None
     name: Optional[Union[str]] # Vendor id
     value: List[Optional[Union[int, float, str,datetime.datetime]]] =[] # Vendor id ka value
+    file_paths: List[Optional[str]] = [] # file paths of all files in the particular Partition Column
     type: str
 
 
@@ -55,10 +56,9 @@ class Partitioning(BaseModel):
 
 
 
-# Attribute-4 Snapshot
+# Attribute-4 Individual file snapshot
 class SnapshotFile(BaseModel):
-    snapshot_id: str
-    timestamp: Optional[Union[int,str]] = None
+    path: str
     operation: str  # Append, overwrite, etc.
     added_records: Optional[int] = 0
     deleted_records: Optional[int] = 0
@@ -80,8 +80,9 @@ class FileMetaData(BaseModel):
     size_bytes: Union[int, float]
     row_count: Optional[int] = None
     row_groups: Optional[List[RowGroup]] = [] # only for hudi and parquet data type
+    schema: Optional[TableSchema] = None
     partition: Partitioning = None # only for iceberg
-    snapshot: Optional[List[SnapshotFile]] = [] # only for hudi
+    snapshot: Optional[List[SnapshotFile]] = [] # only for hudi, iceberg
 
 
 # Attribute-8 Table Properties

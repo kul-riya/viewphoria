@@ -65,7 +65,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str, folder_
             table=table_info,
             schema=table_schema,
             files=file_meta_data
-        )
+        ).model_dump()
 
         return unified_metadata
 
@@ -177,7 +177,7 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str, folder_
                 files_dict.pop(file_path, None)
 
         # Unfied Metadata Model here
-        unified_metadata = UnifiedMetaData(
+        return UnifiedMetaData(
             link=table_info.location,
             info=table_info,
             table_schema=table_schema,
@@ -185,8 +185,8 @@ def metadata_standardizer(file_format: str, metadata: List, bucket: str, folder_
             snapshot_timeline=snapshot_timeline,
             files=list(files_dict.values()),
             properties=properties
-        )
-        unified_metadata_list.append(unified_metadata.model_dump())
-        return unified_metadata_list
+        ).model_dump()
+        
+
     else:
         return []
