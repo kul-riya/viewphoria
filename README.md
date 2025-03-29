@@ -49,7 +49,7 @@ Each format has a very different layout and structure of metadata. For example:
     We use libraries like pyarrow, boto and s3fs to reliably extraact the metadata given the proper link and credentials, and pass the json generated into `standardizer.py` that parses the json and converts it to the standart format, which is then stored in the database. 
 
     The same json is then fetched from the frontend into a number of interactive components to visually display the data.
-
+![alt text](image.png)
 2) #### *Data Fetching* :
 
     Data stores like amazon S3 tend to place a limit on the number of times one can access a bucket via code. 
