@@ -12,23 +12,28 @@ import axios from "axios";
 
 const SchemaComparison = () => {
   const [snapshot, setSnapshot] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start with loading true
+  const [error, setError] = useState(null); // Add error state
   const [snapshot1, setSnapshot1] = useState("");
   const [snapshot2, setSnapshot2] = useState("");
-  console.log(snapshot1);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const response = await axios.get(
           `${
             import.meta.env.VITE_SERVER_URL
           }/metadata/snapshot/67e75e57fab735fceae2f8bd`
         );
         console.log("Fetched data:", response.data.data);
-        setSnapshot(response.data.data);
+        setSnapshot(response.data.data || []); // Default to empty array if no data
       } catch (error) {
         console.error("Error fetching data:", error);
+        setError("Failed to load snapshot data");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -43,26 +48,44 @@ const SchemaComparison = () => {
     }
     return "";
   };
+
   const handleSnapshot1Change = (value) => {
     const selectedSnapshot = updateSnapshot(value);
     setSnapshot1(selectedSnapshot);
   };
+
   const handleSnapshot2Change = (value) => {
     const selectedSnapshot = updateSnapshot(value);
     setSnapshot2(selectedSnapshot);
   };
 
   const fields = [
-    "snapshot_id",
-    "timestamp",
-    "operation",
-    "added_files",
-    "total_size_bytes",
-    "total_records",
-    "changed_partition_count",
-    "deleted_files",
-    "modified_files",
+    "Snapshot ID",
+    "Timestamp",
+    "Operation",
+    "Added Files",
+    "Total Size (in bytes)",
+    "Total Records",
+    "Changed Partition count",
+    "Deleted Files",
+    "Modified Files",
   ];
+
+  if (loading) {
+    return (
+      <div className="p-4 md:p-6 text-white text-center">
+        Loading snapshot data...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 md:p-6 text-red-500 text-center">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-6 bg-[#1A0E2E]/70 rounded-lg max-w-3xl mx-auto">
@@ -143,14 +166,14 @@ const SchemaComparison = () => {
                       index % 2 === 0 ? "bg-[#1E2A3A]" : "bg-[#202640]"
                     } text-sm md:text-base`}
                   >
-                    {snapshot1[field]}
+                    {snapshot1[field] || "-"}
                   </div>
                   <div
                     className={`p-3 md:p-4 text-white ${
                       index % 2 === 0 ? "bg-[#1E2A3A]" : "bg-[#202640]"
                     } text-sm md:text-base`}
                   >
-                    {snapshot2[field]}
+                    {snapshot2[field] || "-"}
                   </div>
                 </React.Fragment>
               ))}
