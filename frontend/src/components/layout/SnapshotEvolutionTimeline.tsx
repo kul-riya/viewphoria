@@ -132,13 +132,11 @@ const SnapshotEvolutionTimeline = () => {
   return (
     <div className="px-20 h-fit">
       <h1 className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-10 text-center">
-        snapshot Timeline
+        Snapshot Timeline
       </h1>
 
-      {/* Mobile/vertical version */}
       <div className="w-full md:hidden">
         <div className="relative pl-8">
-          {/* Vertical line */}
           <div className="absolute left-7.5 top-0 bottom-0 w-1 bg-gray-300"></div>
 
           {tempData.metadata.snapshots.map((snapshot, index) => (
@@ -149,12 +147,10 @@ const SnapshotEvolutionTimeline = () => {
               transition={{ duration: 0.5, delay: index * 0.2 }}
               className="relative mb-8 last:mb-0"
             >
-              {/* Dot */}
               <div className="absolute left-0 top-1/2 w-8 h-8 -ml-4 -translate-y-1/2 bg-purple-500 rounded-full flex items-center justify-center shadow-lg z-10">
                 <FaCircle className="text-white text-xs" />
               </div>
 
-              {/* Card */}
               <div className="ml-8">
                 <Card className="w-full shadow-lg bg-white">
                   <CardContent className="p-4">

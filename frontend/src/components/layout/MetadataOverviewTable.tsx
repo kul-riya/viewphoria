@@ -88,15 +88,15 @@ export default function MetadataOverviewTable() {
   let totalRows = 0;
   let totalSize = 0;
 
-  if (files.length != 0) {
-    files.map((file) => {
+  if (files.length !== 0) {
+    files.forEach((file) => {
       totalRows += file.row_count;
       totalSize += file.size_bytes;
     });
   }
 
   // Helper function to format file size
-  const formatFileSize = (bytes: any) => {
+  const formatFileSize = (bytes) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
     if (bytes < 1024 * 1024 * 1024)
@@ -105,8 +105,7 @@ export default function MetadataOverviewTable() {
   };
 
   return (
-    <div className = "p-2">
-    <Card className="bg-[#321147]/50 backdrop-blur-sm mb-12 text-white w-full mx-auto max-w-3xl rounded-2xl">
+    <Card className="bg-[#321147]/50 backdrop-blur-sm text-white w-full rounded-2xl">
       <CardContent className="p-6 w-full">
         {/* Summary Statistics */}
         <div className="w-full grid grid-cols-3 gap-4 text-center mb-4">
@@ -115,11 +114,11 @@ export default function MetadataOverviewTable() {
             { label: "Row Count", value: totalRows },
             { label: "Total Size", value: formatFileSize(totalSize) },
           ].map((stat, index) => (
-            <div key={index} className="p-2 flex-col justify-between">
-              <p className="w-full flex justify-around text-center text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
+            <div key={index} className="p-2 flex flex-col justify-between">
+              <p className="w-full text-center text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
                 {stat.value}
               </p>
-              <p className="w-full flex justify-around text-center text-sm text-purple-200">
+              <p className="w-full text-center text-sm text-purple-200">
                 {stat.label}
               </p>
             </div>
@@ -161,7 +160,5 @@ export default function MetadataOverviewTable() {
         </div>
       </CardContent>
     </Card>
-    </div>
   );
 }
-
