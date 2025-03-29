@@ -7,7 +7,7 @@ import pyarrow.fs as fs
 
 
 ## OFFERS A MUCH BETTER APPROACH, BUT FOR SOME REASON HAS NETWORK ERRORS WITH SOME BUCKETS
-def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str):
+def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, region_name: str, bucket_name: str, folder_name: str):
     if not (aws_access_key_id and aws_secret_access_key and region_name and bucket_name):
         raise ValueError("Missing required AWS credentials or bucket name!")
 
@@ -49,7 +49,7 @@ def get_metadata_parquet(aws_access_key_id: str, aws_secret_access_key: str, reg
         except Exception as e:
             print(f"Error reading metadata for {parquet_key}: {e}")
 
-    unified_metadata = metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name)
+    unified_metadata = metadata_standardizer(file_format="parquet", metadata=meta, bucket=bucket_name,folder_name="")
 
     return unified_metadata
 

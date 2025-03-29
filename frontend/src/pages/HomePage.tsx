@@ -1,46 +1,91 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion"; // Import motion from Framer Motion
-import PartitionMetadataViewer from "../components/layout/Metadata_Partition";
-import MetadataOverviewTable from "../components/layout/MetadataOverviewTable";
+import { Canvas } from "@react-three/fiber";
+import { Stars } from "@react-three/drei";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import AppSidebar from "../components/layout/AppSidebar";
+import BackgroundScene from "../components/layout/BackgroundScene";
 import DataInputField from "../components/layout/DataInputField";
 import Navbar from "../components/common/Navbar";
+import SnapshotEvolutionTimeline from "../components/layout/SnapshotEvolutionTimeline";
+
+import Loader from "../components/common/Loader";
 
 const HomePage: React.FC = () => {
-  const [fetch, setFetch] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleFetch = () => {
-    console.log(fetch);
-    setFetch(true);
+    setIsLoading(true);
+    // Your fetch logic here
+    // For example:
+    // axios.post(...).then(() => {
+    //   setIsLoading(false);
+    // }).catch(() => {
+    //   setIsLoading(false);
+    // });
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <>
-      <Navbar />
+    <div className="relative h-screen w-screen bg-[#090012] flex overflow-hidden">
+      {/* Sidebar Toggle Button */}
+      <motion.button 
+        onClick={toggleSidebar}
+        className="fixed top-4 left-4 z-[60] bg-purple-600/30 hover:bg-purple-600/50 p-2 rounded-full backdrop-blur-sm"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        {isSidebarOpen ? <X className="text-white" /> : <Menu className="text-white" />}
+      </motion.button>
 
-      <div className="bg-slate-950 px-0.5 overflow-hidden min-h-screen flex flex-col items-center">
-        <motion.div
-          className="w-full flex justify-center"
-          initial={{ y: 0 }} // Initially centered
-          animate={{ y: fetch ? -100 : 0 }} // Move up when fetch is true
-          transition={{ duration: 0.5, ease: "easeInOut" }} // Smooth transition
-        >
-          <DataInputField onFetch={handleFetch} />
-        </motion.div>
-
-        {fetch && (
+      {/* Sidebar */}
+      <AnimatePresence>
+        {isSidebarOpen && (
           <motion.div
-            key="Display-After-Fetch"
-            className="w-full"
-            initial={{ opacity: 0, y: 20 }} // Start invisible & slightly lower
-            animate={{ opacity: 1, y: 0 }} // Fade in & move up
-            transition={{ duration: 0.6, ease: "easeOut" }} // Smooth transition
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ type: 'tween' }}
+            className="fixed left-0 top-0 bottom-0 z-50"
           >
-            <MetadataOverviewTable />
-            <PartitionMetadataViewer />
+            <AppSidebar />
           </motion.div>
         )}
-      </div>
-    </>
+      </AnimatePresence>
+
+      {/* Background Canvas */}
+      <Canvas
+        className="absolute inset-0 z-0 w-full h-full"
+        style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
+      >
+        <ambientLight intensity={0.4} />
+        <pointLight position={[3, 5, 4]} intensity={1.5} />
+        <pointLight position={[-3, -5, 4]} intensity={0.8} color="#d8b4fe" />
+        <Stars radius={400} depth={90} count={5000} factor={6} fade />
+        <BackgroundScene withSphere={false}/>
+      </Canvas>
+
+      {/* Content Area */}
+      <motion.div 
+        className="absolute inset-0 flex items-center justify-center z-20"
+        animate={{ 
+          paddingLeft: isSidebarOpen ? '16rem' : '0',
+          transition: { type: 'tween' }
+        }}
+      >
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="w-full max-w-xl px-4">
+            <DataInputField onFetch={handleFetch} />
+          </div>
+        )}
+      </motion.div>
+    </div>
   );
 };
 

@@ -144,11 +144,11 @@ def read_hudi(aws_access_key_id: str, aws_secret_access_key: str, region_name: s
     data_files["commit_data"] = extract_hudi_commit_metadata("AKIASFIXC4X7UGDOHPX2","MSJM08lZuF07h9Cpb4TtqA++nbKyn//AbzkJwz1K", "eu-north-1", "peri-peri-fries", "hudi_trips_cow/")
     if data_files.properties["hoodie.table.base.file.format"] == "PARQUET":
 
-        data_files["file_metadata"] = get_metadata_parquet()
+        data_files["file_metadata"] = get_metadata_parquet(aws_access_key_id,aws_secret_access_key, region_name, bucket_name, bucket_name)
     else:
         data_files["file_metadata"] = get_metadata_avro()
 
     return standardizer()
 
 if __name__ == "__main__":
-    read_hudi()
+    read_hudi("AKIASFIXC4X7UGDOHPX2","MSJM08lZuF07h9Cpb4TtqA++nbKyn//AbzkJwz1K", "eu-north-1", "peri-peri-fries", "hudi_trips_cow/")

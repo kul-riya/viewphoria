@@ -18,11 +18,13 @@ class MetadataRequestAWS(BaseModel):
     iam_secret_access_key: str
     region_name: str
     bucket_name: str
+    folder_name: str
+
 
 router = APIRouter(prefix="/api")
 
-@router.post("/aws/metadata",dependencies=[Depends(isAuthenticated)])
-async def fetch_metadata_aws(request: MetadataRequestAWS,payload:dict=Depends(isAuthenticated)):
+@router.post("/aws/metadata")
+async def fetch_metadata_aws(request: MetadataRequestAWS, payload:dict):
     res = await get_metadata(request)
     return res
 
@@ -46,3 +48,20 @@ async def add_metadata_to_db(request: MetadataRequestAWS,payload:dict=Depends(is
     except Exception as e:
         print(str(e))
         return HTTPException(status_code=400, detail="Error in adding metadata to db")
+
+
+@router.get("/metadata/get_metadata_from_db",dependencies=[Depends(isAuthenticated)])
+async def get_metadata_from_db(payload:dict=Depends(isAuthenticated)):
+    try:
+        userid = payload['id']
+        foundUser = await User.get(ObjectId(userid),fetch_links=True)
+        metadata_list = []
+        val = json.loads(foundUser.metadata[0].meta_data)
+        # for metadata in foundUser.metadata:
+        #     metadata_dict = json.loads(metadata.meta_data)
+        #     metadata_dict["_id"] = str(metadata.id)
+        #     metadata_list.append(metadata_dict)
+        return {"status": 200, "message": "Metadata fetched successfully from database", "data": metadata_list}
+    except Exception as e:
+        print(str(e))
+        return HTTPException(status_code=400, detail="Error in fetching metadata from db")
